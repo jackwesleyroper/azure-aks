@@ -6,15 +6,6 @@ on:
       - main
   
   workflow_dispatch:
-    inputs:
-      environment:
-        description: 'Deployment environment'
-        required: true
-        default: 'dev'
-        type: choice
-        options:
-        - dev
-        - prod
 
 jobs:
   deploy:
@@ -47,7 +38,7 @@ jobs:
         ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
         ARM_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_KEY }}
-      run: terraform plan -var-file="001_Resource_Groups\infra_environment_${{ github.event.inputs.environment }}.tfvars" -var="environment=${{ github.event.inputs.environment }}"
+      run: terraform plan -var-file="001_Resource_Groups\infra_environment_dev.tfvars"
 
     - name: Terraform Apply
       env:
@@ -56,4 +47,4 @@ jobs:
         ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
         ARM_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_KEY }}
-      run: terraform apply -var-file="001_Resource_Groups\infra_environment_${{ github.event.inputs.environment }}.tfvars" -var="environment=${{ github.event.inputs.environment }}" -auto-approve
+      run: terraform apply -var-file="001_Resource_Groups\infra_environment_dev.tfvars" -auto-approve
