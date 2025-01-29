@@ -1,0 +1,59 @@
+name: Deploy to Azure
+
+on:
+  push:
+    branches:
+      - main
+  
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+        - dev
+        - prod
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    environment: 
+      name: ${{ github.event.inputs.environment }}
+      url: ${{ steps.deploy.outputs.deployment_url }}
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v1
+
+    - name: Initialize Terraform
+      env:
+        ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+        ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+        ARM_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_KEY }}
+      run: terraform init
+
+    - name: Terraform Plan
+      env:
+        ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+        ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+        ARM_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_KEY }}
+      run: terraform plan -var-file="001_Resource_Groups\infra_environment_${{ github.event.inputs.environment }}.tfvars" -var="environment=${{ github.event.inputs.environment }}"
+
+    - name: Terraform Apply
+      env:
+        ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+        ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+        ARM_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_KEY }}
+      run: terraform apply -var-file="001_Resource_Groups\infra_environment_${{ github.event.inputs.environment }}.tfvars" -var="environment=${{ github.event.inputs.environment }}" -auto-approve

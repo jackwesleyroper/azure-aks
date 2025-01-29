@@ -12,16 +12,14 @@ terraform {
     }
   }
 
-  backend "azurerm" {}
+  backend "azurerm" {
+    resource_group_name   = "tf-rg"
+    storage_account_name  = "jacktfstatesa"
+    container_name        = "terraform"
+    key                   = "001_resource_groups.tfstate"
+  }
 }
 
 provider "azurerm" {
   features {}
 }
-
-# provider "azurerm" {
-#   features {}
-#   skip_provider_registration = false
-#   alias                      = "management_sub"
-#   subscription_id            = var.config.management_sub_id
-# }
