@@ -16,7 +16,7 @@ terraform {
     resource_group_name   = "tf-rg"
     storage_account_name  = "jacktfstatesa"
     container_name        = "terraform"
-    key                   = "001_resource_groups.tfstate"
+    key                   = "azure-aks/001_resource_groups.tfstate"
   }
 }
 

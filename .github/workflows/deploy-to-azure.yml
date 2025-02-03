@@ -7,44 +7,21 @@ on:
   
   workflow_dispatch:
 
+permissions:
+  id-token: write
+  contents: read
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
-
-    environment: 
-      name: ${{ github.event.inputs.environment }}
-      url: ${{ steps.deploy.outputs.deployment_url }}
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: 'Az CLI login'
+        uses: azure/login@a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-    - name: Set up Terraform
-      uses: hashicorp/setup-terraform@v1
-
-    - name: Initialize Terraform
-      env:
-        ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-        ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-        ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-        ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-        ARM_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_KEY }}
-      run: terraform init
-
-    - name: Terraform Plan
-      env:
-        ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-        ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-        ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-        ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-        ARM_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_KEY }}
-      run: terraform plan -var-file="001_Resource_Groups\infra_environment_dev.tfvars"
-
-    - name: Terraform Apply
-      env:
-        ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-        ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-        ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-        ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-        ARM_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_KEY }}
-      run: terraform apply -var-file="001_Resource_Groups\infra_environment_dev.tfvars" -auto-approve
+      - name: 'Run az commands'
+        run: |
+          az account show
+          az group list
