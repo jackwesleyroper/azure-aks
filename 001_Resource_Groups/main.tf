@@ -12,12 +12,7 @@ terraform {
     }
   }
 
-  backend "azurerm" {
-    resource_group_name   = "tf-rg"
-    storage_account_name  = "jacktfstatesa"
-    container_name        = "terraform"
-    key                   = "azure-aks/001_resource_groups.tfstate"
-  }
+  backend "azurerm" {}
 }
 
 provider "azurerm" {
