@@ -22,6 +22,7 @@ env:
 
 jobs:
   validate-and-plan:
+    name: Validate and Plan
     runs-on: ubuntu-latest
     environment: dev
     defaults:
@@ -52,22 +53,41 @@ jobs:
           github_token: ${{ github.token }}
     
       - name: Terraform Plan
-        run: terraform plan -var-file="infra_environment_dev.tfvars" -out=main.tfplan
+        run: terraform plan -var-file="infra_environment_dev.tfvars" -out=main-dev.tfplan
 
       - name: Publish Terraform Plan
         uses: actions/upload-artifact@v4
         with:
           name: tfplan
-          path: ./001_Resource_Groups/main.tfplan
+          path: ./001_Resource_Groups/main-dev.tfplan
     
-      # - name: Terraform Apply
-      #   if: github.ref == 'refs/heads/main'
-      #   run: |
-      #     cd 001_Resource_Groups
-      #     terraform apply tfplan
-      #   env:
-      #     ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      #     ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+  apply:
+    needs: validate-and-plan
+    name: Apply & Deploy to Azure
+    runs-on: ubuntu-latest
+    environment: dev
+    defaults:
+      run:
+        working-directory: ./001_Resource_Groups
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform Init
+        run: terraform init -backend-config="resource_group_name=tf-rg" -backend-config="storage_account_name=${{ secrets.TF_STATE_STORAGE_ACCOUNT }}" -backend-config="container_name=terraform"
+
+      - name: Download Terraform Plan
+        uses: actions/download-artifact@v4
+        with:
+          name: tfplan
+          path: ./001_Resource_Groups
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve "./main-dev.tfplan"
 
       # - name: 'Az CLI login'
       #   uses: azure/login@v2
