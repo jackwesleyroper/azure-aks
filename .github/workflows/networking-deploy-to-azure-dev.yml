@@ -1,4 +1,4 @@
-name: Plan & Deploy to Azure - Dev
+name: Plan & Deploy to Azure - Dev Networking
 
 on:
   push:
