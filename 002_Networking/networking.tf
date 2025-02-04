@@ -42,24 +42,24 @@ module "tf-azurerm-subnet" {
 #                           NSG's                                     #
 #######################################################################
 
-# module "tf-azurerm-network-security-group" {
-#   depends_on = [module.tf-azurerm-subnet]
-#   source     = ""
-#   for_each   = local.nsg
-#   resource_group_name = each.value.resource_group_name
-#   location            = each.value.location
-#   name = each.value.name
-#   nsg_rules = each.value.nsg_rules
-#   subnet_id = module.tf-azurerm-subnet[each.value.subnet_name].subnet_id
+module "tf-azurerm-network-security-group" {
+  depends_on          = [module.tf-azurerm-subnet]
+  source              = "github.com/jackwesleyroper/tf-azurerm-network-security-group"
+  for_each            = local.nsg
+  resource_group_name = each.value.resource_group_name
+  location            = each.value.location
+  name                = each.value.name
+  nsg_rules           = each.value.nsg_rules
+  subnet_id           = module.tf-azurerm-subnet[each.value.subnet_name].subnet_id
 
-#   tags = {
-#     Name               = each.value.name
-#     "Environment Type" = var.config.environment_longname
-#     Service            = "AKS"
-#     Owner              = "Jack Roper"
-#     "Resource Purpose" = "Network Security Group"
-#   }
-# }
+  tags = {
+    Name               = each.value.name
+    "Environment Type" = var.config.environment_longname
+    Service            = "AKS"
+    Owner              = "Jack Roper"
+    "Resource Purpose" = "Network Security Group"
+  }
+}
 
 # #######################################################################
 # #                        Route Tables                                 #
