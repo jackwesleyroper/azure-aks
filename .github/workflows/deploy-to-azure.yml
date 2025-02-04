@@ -54,7 +54,7 @@ jobs:
         run: terraform validate
     
       - name: Terraform Plan
-        run: terraform plan -var-file="./001_Resource_Groups/infra_environment_dev.tfvars" -out=main.tfplan
+        run: terraform plan -var-file="infra_environment_dev.tfvars" -out=main.tfplan
 
       - name: Publish Terraform Plan
         uses: actions/upload-artifact@v4
