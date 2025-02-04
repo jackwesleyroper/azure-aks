@@ -1,4 +1,4 @@
-name: Run Azure Login with OIDC
+name: Plan & Deploy to Azure - Dev
 
 on:
   push:
