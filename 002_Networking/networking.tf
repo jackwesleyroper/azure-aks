@@ -2,14 +2,14 @@
 #                        Virtual Network                              #
 #######################################################################
 module "tf-azurerm-vnet" {
-  source   = "github.com/jackwesleyroper/tf-azurerm-vnet"
-  for_each = local.vnet
+  source              = "github.com/jackwesleyroper/tf-azurerm-vnet"
+  for_each            = local.vnet
   resource_group_name = each.value.resource_group_name
   location            = each.value.location
-  name            = each.value.name
-  address_space   = each.value.address_space
-  dns_servers     = each.value.dns_servers
-  is_ddos_enabled = each.value.is_ddos_enabled
+  name                = each.value.name
+  address_space       = each.value.address_space
+  dns_servers         = each.value.dns_servers
+  is_ddos_enabled     = each.value.is_ddos_enabled
 
   tags = {
     Name               = each.value.name
@@ -25,11 +25,11 @@ module "tf-azurerm-vnet" {
 #######################################################################
 
 module "tf-azurerm-subnet" {
-  depends_on = [module.tf-azurerm-vnet]
-  source     = "github.com/jackwesleyroper/tf-azurerm-subnet"
-  for_each   = local.subnet
-  resource_group_name = each.value.resource_group_name
-  vnet_name = each.value.vnet_name
+  depends_on                                    = [module.tf-azurerm-vnet]
+  source                                        = "github.com/jackwesleyroper/tf-azurerm-subnet"
+  for_each                                      = local.subnet
+  resource_group_name                           = each.value.resource_group_name
+  vnet_name                                     = each.value.vnet_name
   name                                          = each.value.name
   address_prefixes                              = each.value.address_prefixes
   service_endpoints                             = each.value.service_endpoints
