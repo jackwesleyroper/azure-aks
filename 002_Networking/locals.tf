@@ -8,7 +8,7 @@ locals {
       location            = var.config.location_longname
       name                = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-vnet-001"
       address_space       = [var.config.vnet_cidr]
-      dns_servers         = "168.63.129.16"
+      dns_servers         = ["168.63.129.16"]
       is_ddos_enabled     = false
     }
   }
@@ -283,18 +283,6 @@ locals {
           description                  = "Allow aks api to aks cluster"
         },
         {
-          name                         = "out_tcp_${var.config.environment_longname}_aks_to_${var.config.environment_longname}_cosmos_privateendpoints"
-          priority                     = 150
-          direction                    = "Outbound"
-          access                       = "Allow"
-          protocol                     = "Tcp"
-          source_port_ranges           = ["*"]
-          destination_port_ranges      = ["443", "445"]
-          source_address_prefixes      = [var.config.aks2_cidr]
-          destination_address_prefixes = [var.config.privateendpointscosmos_cidr]
-          description                  = "Allow aks to cosmos privateendpoints"
-        },
-        {
           name                         = "allow_intra_subnet_outbound"
           priority                     = 4092
           direction                    = "Outbound"
@@ -509,18 +497,6 @@ locals {
           description                  = "Deny All Outbound Traffic"
         },
         # inbound rules
-        {
-          name                         = "in_tcp_${var.config.environment_longname}_compute_to_${var.config.environment_longname}_privateendpoints"
-          priority                     = 120
-          direction                    = "Inbound"
-          access                       = "Allow"
-          protocol                     = "Tcp"
-          source_port_ranges           = ["*"]
-          destination_port_ranges      = ["443", "445"]
-          source_address_prefixes      = [var.config.compute_cidr]
-          destination_address_prefixes = [var.config.privateendpoints1_cidr]
-          description                  = "Allow compute Inbound to privateendpoints"
-        },
         {
           name                         = "in_tcp_${var.config.environment_longname}_aks_001_to_${var.config.environment_longname}_privateendpoints"
           priority                     = 140
