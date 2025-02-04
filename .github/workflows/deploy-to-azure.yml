@@ -21,7 +21,7 @@ env:
   ARM_USE_AZUREAD: true
 
 jobs:
-  build-and-deploy:
+  validate-and-plan:
     runs-on: ubuntu-latest
     environment: dev
     defaults:
@@ -54,7 +54,13 @@ jobs:
         run: terraform validate
     
       - name: Terraform Plan
-        run: terraform plan -out=tfplan
+        run: terraform plan -var-file="./001_Resource_Groups/infra_environment_dev.tfvars" -out=main.tfplan
+
+      - name: Publish Terraform Plan
+        uses: actions/upload-artifact@v4
+        with:
+          name: tfplan
+          path: ./001_Resource_Groups/main.tfplan
     
       # - name: Terraform Apply
       #   if: github.ref == 'refs/heads/main'
