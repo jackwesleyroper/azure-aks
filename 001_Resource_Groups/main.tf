@@ -13,6 +13,7 @@ terraform {
   }
 
   backend "azurerm" {
+    key = "azure-aks/001_resource_groups.tfstate"
     use_oidc = true
   }
 }

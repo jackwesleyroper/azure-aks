@@ -4,12 +4,22 @@ on:
   push:
     branches:
       - main
-  
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
   id-token: write
   contents: read
+  pull-requests: write
+
+env:
+  ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+  ARM_USE_AZUREAD: true
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -19,55 +29,53 @@ jobs:
 
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v2
-        with:
-          terraform_wrapper: false
 
-      - name: 'Az CLI login'
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          enable-AzPSSession: true
+      # - name: 'Az CLI login'
+      #   uses: azure/login@v2
+      #   with:
+      #     client-id: ${{ secrets.AZURE_CLIENT_ID }}
+      #     tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+      #     subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      #     enable-AzPSSession: true
 
-      - name: Configure Terraform backend
+      - name: Terraform Fmt
+        id: fmt
+        run: terraform fmt -check
+
+      - name: Terraform Init
         run: |
           cd 001_Resource_Groups
-          terraform init \
-            -backend-config="resource_group_name=tf-rg" \
-            -backend-config="storage_account_name=${{ secrets.TF_STATE_STORAGE_ACCOUNT }}" \
-            -backend-config="container_name=terraform" \
-            -backend-config="key=azure-aks/001_resource_groups.tfstate"
+          terraform init -backend-config="resource_group_name=tf-rg" -backend-config="storage_account_name=${{ secrets.TF_STATE_STORAGE_ACCOUNT }}" -backend-config="container_name=terraform"
 
       - name: Terraform Validate
         run: |
           cd 001_Resource_Groups
           terraform validate
     
-      - name: Terraform Plan
-        run: |
-          cd 001_Resource_Groups
-          terraform plan -out=tfplan
+      # - name: Terraform Plan
+      #   run: |
+      #     cd 001_Resource_Groups
+      #     terraform plan -out=tfplan
     
-      - name: Terraform Apply
-        if: github.ref == 'refs/heads/main'
-        run: |
-          cd 001_Resource_Groups
-          terraform apply tfplan
-        env:
-          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      # - name: Terraform Apply
+      #   if: github.ref == 'refs/heads/main'
+      #   run: |
+      #     cd 001_Resource_Groups
+      #     terraform apply tfplan
+      #   env:
+      #     ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      #     ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
 
-      - name: Azure CLI script
-        uses: azure/cli@v2
-        with:
-          azcliversion: latest
-          inlineScript: |
-            az account show
+      # - name: Azure CLI script
+      #   uses: azure/cli@v2
+      #   with:
+      #     azcliversion: latest
+      #     inlineScript: |
+      #       az account show
 
-      - name: Azure PowerShell script
-        uses: azure/powershell@v2
-        with:
-          azPSVersion: "latest"
-          inlineScript: |
-            Get-AzContext
+      # - name: Azure PowerShell script
+      #   uses: azure/powershell@v2
+      #   with:
+      #     azPSVersion: "latest"
+      #     inlineScript: |
+      #       Get-AzContext
