@@ -23,7 +23,7 @@ locals {
       name                                          = "${var.config.environment_longname}-aks-snet-001"
       address_prefixes                              = [var.config.aks1_cidr]
       service_endpoints                             = null
-      private_endpoint_network_policies_enabled     = true
+      private_endpoint_network_policies_enabled     = "Enabled"
       private_link_service_network_policies_enabled = true
       delegation                                    = {}
     },
@@ -33,7 +33,7 @@ locals {
       name                                          = "${var.config.environment_longname}-aks-snet-002"
       address_prefixes                              = [var.config.aks2_cidr]
       service_endpoints                             = null
-      private_endpoint_network_policies_enabled     = true
+      private_endpoint_network_policies_enabled     = "Enabled"
       private_link_service_network_policies_enabled = true
 
       delegation = {
@@ -52,7 +52,7 @@ locals {
       name                                          = "${var.config.environment_longname}-privateendpoints-snet-001"
       address_prefixes                              = [var.config.privateendpoints1_cidr]
       service_endpoints                             = null
-      private_endpoint_network_policies_enabled     = true
+      private_endpoint_network_policies_enabled     = "Enabled"
       private_link_service_network_policies_enabled = false
       delegation                                    = {}
     },
@@ -62,7 +62,7 @@ locals {
       name                                          = "${var.config.environment_longname}-privateendpoints-snet-002"
       address_prefixes                              = [var.config.privateendpoints2_cidr]
       service_endpoints                             = null
-      private_endpoint_network_policies_enabled     = true
+      private_endpoint_network_policies_enabled     = "Enabled"
       private_link_service_network_policies_enabled = false
       delegation                                    = {}
     },
