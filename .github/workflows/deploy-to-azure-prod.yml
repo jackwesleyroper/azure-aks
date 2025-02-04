@@ -82,7 +82,7 @@ jobs:
       - name: Download Terraform Plan
         uses: actions/download-artifact@v4
         with:
-          name: tfplan
+          name: tfplan-prod
           path: ./001_Resource_Groups
 
       - name: Terraform Apply
