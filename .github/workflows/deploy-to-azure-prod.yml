@@ -40,7 +40,7 @@ jobs:
         run: terraform fmt -check
 
       - name: Terraform Init
-        run: terraform init -backend-config="resource_group_name=tf-rg" -backend-config="storage_account_name=${{ secrets.TF_STATE_STORAGE_ACCOUNT }}" -backend-config="container_name=terraform" -backend-config="key="azure-aks/prod/001_resource_groups.tfstate"
+        run: terraform init -backend-config="resource_group_name=tf-rg" -backend-config="storage_account_name=${{ secrets.TF_STATE_STORAGE_ACCOUNT }}" -backend-config="container_name=terraform" -backend-config="key=azure-aks/prod/001_resource_groups.tfstate"
 
       - name: Terraform Validate
         run: terraform validate
