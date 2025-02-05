@@ -3,8 +3,8 @@ locals {
   #                          VNets                                      #
   #######################################################################
   vnets_connectivity = {
-    "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-vnet-001" = {
-      name                 = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-vnet-001"
+    "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-vnet-001" = {
+      name                 = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-vnet-001"
       resource_group_name  = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-network-rg-001"
       registration_enabled = false
     },
