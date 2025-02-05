@@ -9,9 +9,9 @@ module "resource_groups" {
 
   tags = {
     Name               = each.value.resource_group_name
-    "Environment Type" = var.config.environment_longname
+    "Environment_Type" = var.config.environment_longname
     Service            = "AKS"
     Owner              = "Jack Roper"
-    "Resource Purpose" = "Resource Group"
+    "Resource_Purpose" = "Resource Group"
   }
 }

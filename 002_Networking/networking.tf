@@ -13,10 +13,10 @@ module "tf-azurerm-vnet" {
 
   tags = {
     Name               = each.value.name
-    "Environment Type" = var.config.environment_longname
+    "Environment_Type" = var.config.environment_longname
     Service            = "AKS"
     Owner              = "Jack Roper"
-    "Resource Purpose" = "Virtual Network"
+    "Resource_Purpose" = "Virtual Network"
   }
 }
 
@@ -54,10 +54,10 @@ module "tf-azurerm-network-security-group" {
 
   tags = {
     Name               = each.value.name
-    "Environment Type" = var.config.environment_longname
+    "Environment_Type" = var.config.environment_longname
     Service            = "AKS"
     Owner              = "Jack Roper"
-    "Resource Purpose" = "Network Security Group"
+    "Resource_Purpose" = "Network Security Group"
   }
 }
 
@@ -87,9 +87,9 @@ module "tf-azurerm-network-security-group" {
 
 #   tags = {
 #     Name               = each.value.name
-#     "Environment Type" = var.config.environment_longname
+#     "Environment_Type" = var.config.environment_longname
 #     Service            = "AKS"
 #     Owner              = "Jack Roper"
-#     "Resource Purpose" = "Route table"
+#     "Resource_Purpose" = "Route table"
 #   }
 # }

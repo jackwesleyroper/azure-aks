@@ -15,9 +15,9 @@ module "log_analytics" {
 
   tags = {
     Name               = each.value.name
-    "Environment Type" = var.config.regulation_longname
+    "Environment_Type" = var.config.regulation_longname
     Service            = "AKS"
     Owner              = "Jack Roper"
-    "Resource Purpose" = "Log Analytics Workspace"
+    "Resource_Purpose" = "Log Analytics Workspace"
   }
 }

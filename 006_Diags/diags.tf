@@ -36,10 +36,10 @@
 
 #   tags = {
 #     Name               = each.value.name
-#     "Environment Type" = var.config.environment_longname
+#     "Environment_Type" = var.config.environment_longname
 #     Service            = "AKS"
 #     Owner              = "Jack Roper"
-#     "Resource Purpose" = "Network Watcher Flow Log"
+#     "Resource_Purpose" = "Network Watcher Flow Log"
 #   }
 # }
 

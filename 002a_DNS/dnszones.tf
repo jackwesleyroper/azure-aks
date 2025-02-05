@@ -9,10 +9,10 @@ module "dns_zone" {
 
   tags = {
     Name               = each.value.dns_zone_name
-    "Environment Type" = var.config.regulation_longname
+    "Environment_Type" = var.config.regulation_longname
     Service            = "AKS"
     Owner              = "Jack Roper"
-    "Resource Purpose" = "Private DNS Zone"
+    "Resource_Purpose" = "Private DNS Zone"
   }
 }
 
@@ -31,10 +31,10 @@ module "dns_zone_connectivity" {
 
   tags = {
     Name               = each.value.dns_zone_name
-    "Environment Type" = var.config.regulation_longname
+    "Environment_Type" = var.config.regulation_longname
     Service            = "AKS"
     Owner              = "Jack Roper"
-    "Resource Purpose" = "Virtual Network Link"
+    "Resource_Purpose" = "Virtual Network Link"
   }
 
   providers = { azurerm.target_sub = azurerm }
