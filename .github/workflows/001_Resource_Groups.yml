@@ -4,9 +4,13 @@ on:
   push:
     branches:
       - main
+    paths:
+      - '001_Resource_Groups/**'
   pull_request:
     branches:
       - main
+    paths:
+      - '001_Resource_Groups/**'
   workflow_dispatch:
 
 permissions:

@@ -1,6 +1,5 @@
 config = {
   environment_longname        = "dev"
-  environment_shared_longname = "devshared"
   regulation_longname         = "nonprod"
   regulation_shortname        = "np"
   location_shortname          = "uks"
