@@ -71,7 +71,7 @@ locals {
     #revisit permissions here
     "access-policy-key-sp-cn" = {
       tenant_id               = data.azurerm_client_config.current.tenant_id
-      id_name                 = "aks-${var.config.regulation_longname}-${var.config.environment_service_principal}"
+      id_name                 = "GitHub"
       is_user_assigned_id     = false
       key_vault_name          = "${var.config.environment_shortname}-${var.config.regulation_shortname}-aks-${var.config.location_shortname}-core-kv-1"
       key_permissions         = ["Backup", "Create", "Decrypt", "Delete", "Encrypt", "Get", "Import", "List", "Purge", "Recover", "Restore", "Sign", "UnwrapKey", "Update", "Verify", "WrapKey", "Release", "Rotate", "GetRotationPolicy", "SetRotationPolicy"]
@@ -145,8 +145,8 @@ locals {
   #                         Service Principals                          #
   #######################################################################
   service_principals = {
-    "Github" = {
-      name = "Github"
+    "GitHub" = {
+      name = "GitHub"
     }
   }
 
