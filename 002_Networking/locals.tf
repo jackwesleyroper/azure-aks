@@ -742,7 +742,6 @@ locals {
   #######################################################################
   #                         Route Table                                 #
   #######################################################################
-
   route_table = {
     "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-rt-001" = {
       name                          = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-rt-001"
