@@ -749,24 +749,24 @@ locals {
       associated_subnets            = ["${var.config.environment_longname}-aks-snet-001", "${var.config.environment_longname}-aks-snet-002"]
       resource_group_name           = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-network-rg-001"
       location                      = var.config.location_longname
-      disable_bgp_route_propagation = true
-      routes = {}
+      bgp_route_propagation_enabled = false
+      routes                        = {}
     },
     "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-privateendpoints-rt-001" = {
       name                          = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-privateendpoints-rt-001"
       associated_subnets            = ["${var.config.environment_longname}-privateendpoints-snet-001"]
       resource_group_name           = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-network-rg-001"
       location                      = var.config.location_longname
-      disable_bgp_route_propagation = true
-      routes = {}
+      bgp_route_propagation_enabled = false
+      routes                        = {}
     },
     "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-privateendpoints-rt-002" = {
       name                          = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-privateendpoints-rt-002"
       associated_subnets            = ["${var.config.environment_longname}-privateendpoints-snet-002"]
       resource_group_name           = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-network-rg-001"
       location                      = var.config.location_longname
-      disable_bgp_route_propagation = true
-      routes = {}
+      bgp_route_propagation_enabled = false
+      routes                        = {}
     },
   }
 }

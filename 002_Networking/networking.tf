@@ -71,7 +71,7 @@ module "tf-azurerm-route-table" {
   associated_subnets            = each.value.associated_subnets
   subnet_id                     = module.tf-azurerm-subnet
   name                          = each.value.name
-  disable_bgp_route_propagation = each.value.disable_bgp_route_propagation
+  bgp_route_propagation_enabled = each.value.bgp_route_propagation_enabled
   routes                        = each.value.routes
 
   tags = {
