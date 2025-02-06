@@ -52,7 +52,7 @@ All modules used can be found under my jackwesleyroper GitHub account.
 ## Build notes / to do
 
 * Add module version constraints after first successful build
-* Restict KV access to Github actions listed here: https://api.github.com/meta (currently set to allow public access)
+* Restict KV access to Github actions listed here: https://api.github.com/meta (currently set to allow public access and default action is allow)
 * Add rationale for each stage for resources used and settings
 * Is Premium KV needed?
 * 

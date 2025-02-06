@@ -25,11 +25,11 @@ locals {
       enabled_for_template_deployment = true
       enable_rbac_authorization       = false
       purge_protection_enabled        = true
-      public_network_access_enabled   = true
+      public_network_access_enabled   = true #change to false when switched to whitelist github actions runners or private runner
       soft_delete_retention_days      = 7
       tenant_id                       = data.azurerm_client_config.current.tenant_id
       snet_to_bypass_name             = null
-      default_action                  = "Deny"
+      default_action                  = "Allow" #change to deny when switched to whitelist github actions runners or private runner
     }
   }
 
