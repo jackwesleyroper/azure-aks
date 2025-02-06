@@ -6,7 +6,7 @@ locals {
   subnets = {
     "${var.config.environment_longname}-privateendpoints-snet-001" = {
       name                = "${var.config.environment_longname}-privateendpoints-snet-001"
-      vnet_name           = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-vnet-001"
+      vnet_name           = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-vnet-001"
       resource_group_name = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-network-rg-001"
     }
   }
@@ -137,8 +137,8 @@ locals {
   #                   Log Analytics Workspace                           #
   #######################################################################
   log_analytics = {
-    name                = "${var.config.environment_log_analytics}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-law-001"
-    resource_group_name = "${var.config.environment_log_analytics}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-monitor-rg-001"
+    name                = "${var.config.environment_shortname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-law-001"
+    resource_group_name = "${var.config.environment_shortname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-rg-001"
   }
 
   #######################################################################
@@ -155,7 +155,7 @@ locals {
   #######################################################################
   diagnostic_settings = {
     "${var.config.environment_shortname}-${var.config.regulation_shortname}-aks-${var.config.location_shortname}-core-kv-1" = {
-      name                           = "${var.config.environment_log_analytics}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-law-001"
+      name                           = "${var.config.environment_shortname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-law-001"
       target_resource_name           = "${var.config.environment_shortname}-${var.config.regulation_shortname}-aks-${var.config.location_shortname}-core-kv-1"
       log_analytics_destination_type = null
       logs_category = {
