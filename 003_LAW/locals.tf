@@ -14,4 +14,29 @@ locals {
       internet_query_enabled             = true
     }
   }
+
+  #######################################################################
+  #                               AMPLS                                 #
+  #######################################################################
+  ampls = {
+    "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-ampls-001" = {
+      name                  = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-ampls-001"
+      resource_group_name   = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-rg-001"
+      ingestion_access_mode = "PrivateOnly"
+      query_access_mode     = "Open"
+    }
+  }
+
+  #######################################################################
+  #                           AMPLS Service                             #
+  #######################################################################
+  ampls_services_law = {
+    "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-law-amplsservice-001" = {
+      name                 = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-law-amplsservice-001"
+      resource_group_name  = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-rg-001"
+      scope_name           = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-ampls-001"
+      linked_resource_name = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-law-001"
+    }
+  }
+
 }
