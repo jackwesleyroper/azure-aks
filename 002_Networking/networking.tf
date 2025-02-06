@@ -23,7 +23,6 @@ module "tf-azurerm-vnet" {
 #######################################################################
 #                           Subnets                                   #
 #######################################################################
-
 module "tf-azurerm-subnet" {
   depends_on                                    = [module.tf-azurerm-vnet]
   source                                        = "github.com/jackwesleyroper/tf-azurerm-subnet"
@@ -41,7 +40,6 @@ module "tf-azurerm-subnet" {
 #######################################################################
 #                           NSG's                                     #
 #######################################################################
-
 module "tf-azurerm-network-security-group" {
   depends_on          = [module.tf-azurerm-subnet]
   source              = "github.com/jackwesleyroper/tf-azurerm-network-security-group"
@@ -61,35 +59,26 @@ module "tf-azurerm-network-security-group" {
   }
 }
 
-# #######################################################################
-# #                        Route Tables                                 #
-# #######################################################################
+#######################################################################
+#                        Route Tables                                 #
+#######################################################################
+module "tf-azurerm-route-table" {
+  depends_on                    = [module.tf-azurerm-subnet]
+  source                        = "github.com/jackwesleyroper/tf-azurerm-route-table"
+  for_each                      = local.route_table
+  resource_group_name           = each.value.resource_group_name
+  location                      = each.value.location
+  associated_subnets            = each.value.associated_subnets
+  subnet_id                     = module.tf-azurerm-subnet
+  name                          = each.value.name
+  disable_bgp_route_propagation = each.value.disable_bgp_route_propagation
+  routes                        = each.value.routes
 
-# module "tf-azurerm-route-table" {
-#   depends_on = [module.tf-azurerm-subnet]
-#   source     = "git@ssh.dev.azure.com:v3/DCC-DM-Application/CHNET-INFRA/tf-azurerm-route-table?ref=1.3"
-#   for_each   = local.route_table
-
-#   # resource group
-#   resource_group_name = each.value.resource_group_name
-#   location            = each.value.location
-
-#   # subnet
-#   associated_subnets = each.value.associated_subnets
-#   subnet_id          = module.tf-azurerm-subnet
-
-#   # route table
-#   name                          = each.value.name
-#   disable_bgp_route_propagation = each.value.disable_bgp_route_propagation
-
-#   # routes
-#   routes = each.value.routes
-
-#   tags = {
-#     Name               = each.value.name
-#     "Environment_Type" = var.config.environment_longname
-#     Service            = "AKS"
-#     Owner              = "Jack Roper"
-#     "Resource_Purpose" = "Route table"
-#   }
-# }
+  tags = {
+    Name               = each.value.name
+    "Environment_Type" = var.config.environment_longname
+    Service            = "AKS"
+    Owner              = "Jack Roper"
+    "Resource_Purpose" = "Route table"
+  }
+}

@@ -739,71 +739,34 @@ locals {
     },
   }
 
-  # #######################################################################
-  # #                         Route Table                                 #
-  # #######################################################################
+  #######################################################################
+  #                         Route Table                                 #
+  #######################################################################
 
-  # route_table = {
-  #   "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-rt-001" = {
-  #     name                          = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-rt-001"
-  #     associated_subnets            = ["${var.config.environment_longname}-aks-snet-001", "${var.config.environment_longname}-aks-snet-002"]
-  #     resource_group_name           = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-network-rg-001"
-  #     location                      = var.config.location_longname
-  #     disable_bgp_route_propagation = true
-  #     routes = {},
-  #   "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-privateendpoints-rt-001" = {
-  #     name                          = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-privateendpoints-rt-001"
-  #     associated_subnets            = ["${var.config.environment_longname}-privateendpoints-snet-001"]
-  #     resource_group_name           = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-network-rg-001"
-  #     location                      = var.config.location_longname
-  #     disable_bgp_route_propagation = true
-  #     routes = {
-  #       "to_firewall" = {
-  #         name                   = "to_firewall"
-  #         address_prefix         = "0.0.0.0/0"
-  #         next_hop_type          = "VirtualAppliance"
-  #         next_hop_in_ip_address = var.config.firewall_ip
-  #       },
-  #       # "con1_uks_cidr_to_firewall" = {
-  #       #   name                   = "con1_uks_cidr_to_firewall"
-  #       #   address_prefix         = var.config.con1vnet_cidr
-  #       #   next_hop_type          = "VirtualAppliance"
-  #       #   next_hop_in_ip_address = var.config.firewall_ip
-  #       # },
-  #       # "con2_uks_cidr_to_firewall" = {
-  #       #   name                   = "con2_uks_cidr_to_firewall"
-  #       #   address_prefix         = var.config.con2vnet_cidr
-  #       #   next_hop_type          = "VirtualAppliance"
-  #       #   next_hop_in_ip_address = var.config.firewall_ip
-  #       # }
-  #     }
-  #   },
-  #   "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-privateendpoints-rt-002" = {
-  #     name                          = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-privateendpoints-rt-002"
-  #     associated_subnets            = ["${var.config.environment_longname}-privateendpoints-snet-002"]
-  #     resource_group_name           = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-network-rg-001"
-  #     location                      = var.config.location_longname
-  #     disable_bgp_route_propagation = true
-  #     routes = {
-  #       "to_firewall" = {
-  #         name                   = "to_firewall"
-  #         address_prefix         = "0.0.0.0/0"
-  #         next_hop_type          = "VirtualAppliance"
-  #         next_hop_in_ip_address = var.config.firewall_ip
-  #       },
-  #       # "con1_uks_cidr_to_firewall" = {
-  #       #   name                   = "con1_uks_cidr_to_firewall"
-  #       #   address_prefix         = var.config.con1vnet_cidr
-  #       #   next_hop_type          = "VirtualAppliance"
-  #       #   next_hop_in_ip_address = var.config.firewall_ip
-  #       # },
-  #       # "con2_uks_cidr_to_firewall" = {
-  #       #   name                   = "con2_uks_cidr_to_firewall"
-  #       #   address_prefix         = var.config.con2vnet_cidr
-  #       #   next_hop_type          = "VirtualAppliance"
-  #       #   next_hop_in_ip_address = var.config.firewall_ip
-  #       # }
-  #     }
-  #   },
-  # }
+  route_table = {
+    "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-rt-001" = {
+      name                          = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-rt-001"
+      associated_subnets            = ["${var.config.environment_longname}-aks-snet-001", "${var.config.environment_longname}-aks-snet-002"]
+      resource_group_name           = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-network-rg-001"
+      location                      = var.config.location_longname
+      disable_bgp_route_propagation = true
+      routes = {}
+    },
+    "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-privateendpoints-rt-001" = {
+      name                          = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-privateendpoints-rt-001"
+      associated_subnets            = ["${var.config.environment_longname}-privateendpoints-snet-001"]
+      resource_group_name           = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-network-rg-001"
+      location                      = var.config.location_longname
+      disable_bgp_route_propagation = true
+      routes = {}
+    },
+    "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-privateendpoints-rt-002" = {
+      name                          = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-privateendpoints-rt-002"
+      associated_subnets            = ["${var.config.environment_longname}-privateendpoints-snet-002"]
+      resource_group_name           = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-network-rg-001"
+      location                      = var.config.location_longname
+      disable_bgp_route_propagation = true
+      routes = {}
+    },
+  }
 }
