@@ -73,7 +73,7 @@ module "storage_container" {
   depends_on            = [module.storage_account, module.private_endpoint]
   for_each              = local.storage_containers
   name                  = each.value.name
-  storage_account_id    = each.value.storage_account_id
+  storage_account_id    = module.storage_account[each.key].sa_id
   container_access_type = each.value.container_access_type
 }
 
