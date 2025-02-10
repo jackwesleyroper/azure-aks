@@ -40,15 +40,16 @@ All modules used can be found under my jackwesleyroper GitHub account.
 2. Create an Entra group named `Contributor-KV-<environment_name>` and add users to this that will have Key Vault access.
 3. Create an Entra group named `AKS-Admin-<environment_name>` and add users to this that will have AKS Admin access.
 4. Create an Entra Service Principal called `aks-nonprod-<environment_name>`.
-5. Create a resource group `tf-rg` in the Subscription.
-6. Create a storage account in the Subscription with a container named `terraform`.
-7. Create GitHub Environments in your repo as needed (e.g. Dev / Prod).
-8. Create Secrets in the GitHub environment:
+5. To create an Azure Kubernetes Service cluster with API Server VNet Integration - we need to register for the preview extension. Using Azure CLI, run: `az extension add --name aks-preview` and then update `az extension update --name aks-preview` - then register the Register the 'EnableAPIServerVnetIntegrationPreview' feature flag using `az feature register --namespace "Microsoft.ContainerService" --name "EnableAPIServerVnetIntegrationPreview"`. It takes a few minutes for the status to show Registered, check using `az feature show --namespace "Microsoft.ContainerService" --name "EnableAPIServerVnetIntegrationPreview"`, then refresh the registration of the Microsoft.ContainerService resource provider using the az provider register command `az provider register --namespace Microsoft.ContainerService`.
+6. Create a resource group `tf-rg` in the Subscription.
+7. Create a storage account in the Subscription with a container named `terraform`.
+8. Create GitHub Environments in your repo as needed (e.g. Dev / Prod).
+9. Create Secrets in the GitHub environment:
    1. `AZURE_CLIENT_ID`
    2. `AZURE_SUBSCRIPTION_ID`
    3. `AZURE_TENANT_ID`
    4. `TF_STATE_STORAGE_ACCOUNT` (containing storage account name that will hold Terraform State files from step 3)
-9. Push the code using the manual workflow dispatch trigger under the actions tab in order, e.g. 001, 002, 003 etc. until all runs have completed. If you change the code in a particular section, the workflows are set to automatically push on updates (CI/CD).
+10. Push the code using the manual workflow dispatch trigger under the actions tab in order, e.g. 001, 002, 003 etc. until all runs have completed. If you change the code in a particular section, the workflows are set to automatically push on updates (CI/CD).
 
 ## Build notes / to do
 
