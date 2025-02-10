@@ -35,10 +35,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Terraform
-        uses: hashicorp/setup-terraform@v2
+        uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Fmt
         id: fmt
@@ -76,10 +76,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Terraform
-        uses: hashicorp/setup-terraform@v2
+        uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Init
         run: terraform init -backend-config="resource_group_name=tf-rg" -backend-config="storage_account_name=${{ secrets.TF_STATE_STORAGE_ACCOUNT }}" -backend-config="container_name=terraform"
