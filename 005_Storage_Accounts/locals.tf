@@ -24,7 +24,7 @@ locals {
       resource_group_name                        = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-rg-001"
       location                                   = var.config.location_longname
       key_vault_resource_group_name              = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-rg-001"
-      key_vault_name                             = "${var.config.environment_shortname}-${var.config.regulation_shortname}-aks-${var.config.location_shortname}-kv-1"
+      key_vault_name                             = "${var.config.environment_shortname}-${var.config.regulation_shortname}-aks-${var.config.location_shortname}-core-kv-1"
       key_vault_key_name                         = "${var.config.environment_shortname}${var.config.regulation_shortname}aks${var.config.location_shortname}logsstr001-stg-cmk-001"
       user_assigned_identity_resource_group_name = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-rg-001"
       user_assigned_identity_name                = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-cmk-id-001"
