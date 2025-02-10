@@ -119,6 +119,21 @@ locals {
           time_before_expiry = "P7D"
         }
       }
+    },
+    "${var.config.environment_longname}${var.config.regulation_shortname}aks${var.config.location_shortname}acr001-cos-cmk-001" = {
+      name            = "${var.config.environment_longname}${var.config.regulation_shortname}aks${var.config.location_shortname}acr001-cos-cmk-001"
+      key_type        = "RSA-HSM"
+      key_size        = 2048
+      key_opts        = ["unwrapKey", "wrapKey"]
+      key_vault_name  = "${var.config.environment_longname}-${var.config.regulation_shortname}-aks-${var.config.location_shortname}-core-kv-1"
+      expiration_date = "2025-12-31T00:00:00Z"
+      rotation_policy = {
+        expire_after         = "P28D"
+        notify_before_expiry = "P7D"
+        automatic = {
+          time_before_expiry = "P7D"
+        }
+      }
     }
   }
 
