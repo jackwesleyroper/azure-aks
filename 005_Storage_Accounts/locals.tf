@@ -63,7 +63,7 @@ locals {
   #                   Storage Container                                 #
   #######################################################################
   storage_containers = {
-    backup = {
+    "${var.config.environment_shortname}${var.config.regulation_shortname}aks${var.config.location_shortname}logsstr001" = {
       name                  = "backup"
       container_access_type = "private"
     }
