@@ -202,7 +202,6 @@ data "azurerm_private_dns_zone" "queue_private_dns_zones" {
   for_each            = toset(local.queue_private_dns_zones.names)
   name                = each.key
   resource_group_name = local.queue_private_dns_zones.resource_group_name
-  provider            = azurerm.connectivity_sub
 }
 
 module "queue_private_endpoint" {
