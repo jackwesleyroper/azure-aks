@@ -84,7 +84,6 @@ data "azurerm_private_dns_zone" "private_dns_zones" {
   for_each            = toset(local.private_dns_zones.names)
   name                = each.key
   resource_group_name = local.private_dns_zones.resource_group_name
-  provider            = azurerm.connectivity_sub
 }
 
 #######################################################################
@@ -133,7 +132,6 @@ data "azurerm_private_dns_zone" "file_share_private_dns_zones" {
   for_each            = toset(local.file_share_private_dns_zones.names)
   name                = each.key
   resource_group_name = local.file_share_private_dns_zones.resource_group_name
-  provider            = azurerm.connectivity_sub
 }
 
 module "file_share_private_endpoint" {
@@ -169,7 +167,6 @@ data "azurerm_private_dns_zone" "table_private_dns_zones" {
   for_each            = toset(local.table_private_dns_zones.names)
   name                = each.key
   resource_group_name = local.table_private_dns_zones.resource_group_name
-  provider            = azurerm.connectivity_sub
 }
 
 module "table_private_endpoint" {
