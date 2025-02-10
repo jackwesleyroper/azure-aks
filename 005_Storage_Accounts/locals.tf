@@ -65,7 +65,7 @@ locals {
   storage_containers = {
     backup = {
       name                  = "backup"
-      storage_account_name  = "${var.config.environment_shortname}${var.config.regulation_shortname}aks${var.config.location_shortname}logsstr001"
+      storage_account_id    = "${var.config.environment_shortname}${var.config.regulation_shortname}aks${var.config.location_shortname}logsstr001".id
       container_access_type = "private"
     }
   }
