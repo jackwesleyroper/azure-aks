@@ -95,9 +95,9 @@ locals {
       is_user_assigned_id     = false
       key_vault_name          = "${var.config.environment_shortname}-${var.config.regulation_shortname}-aks-${var.config.location_shortname}-core-kv-1"
       key_permissions         = ["Get", "List", "Update", "Create", "Import", "Recover", "Backup", "Restore"]
-      secret_permissions      = []
+      secret_permissions      = ["Get", "List", "Set", "Delete", "Recover", "Backup", "Restore"]
       storage_permissions     = []
-      certificate_permissions = []
+      certificate_permissions = ["Get", "List", "Update", "Create", "Import", "Recover", "Backup", "Restore"]
     },
   }
 
