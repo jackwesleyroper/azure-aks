@@ -1,16 +1,16 @@
-name: Plan & Deploy to Azure - Dev Containers
+name: Plan & Deploy to Azure - Dev Diagnostic Settings
 
 on:
   push:
     branches:
       - main
     paths:
-      - '007_Containers/**'
+      - '006_Diags/**'
   pull_request:
     branches:
       - main
     paths:
-      - '007_Containers/**'
+      - '006_Diags/**'
   workflow_dispatch:
 
 permissions:
@@ -31,7 +31,7 @@ jobs:
     environment: dev
     defaults:
       run:
-        working-directory: ./007_Containers
+        working-directory: ./006_Diags
 
     steps:
       - name: Checkout code
@@ -39,16 +39,14 @@ jobs:
 
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v3
-        #with:
-        #  terraform_version: "1.2.7"
       
-      - name: 'Az CLI login'
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          enable-AzPSSession: true
+      # - name: 'Az CLI login'
+      #   uses: azure/login@v2
+      #   with:
+      #     client-id: ${{ secrets.AZURE_CLIENT_ID }}
+      #     tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+      #     subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      #     enable-AzPSSession: true
 
       - name: Terraform Fmt
         id: fmt
@@ -73,7 +71,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: tfplan-dev
-          path: ./007_Containers/main-dev.tfplan
+          path: ./006_Diags/main-dev.tfplan
     
   apply:
     needs: validate-and-plan
@@ -82,7 +80,7 @@ jobs:
     environment: dev
     defaults:
       run:
-        working-directory: ./007_Containers
+        working-directory: ./006_Diags
 
     steps:
       - name: Checkout code
@@ -90,16 +88,14 @@ jobs:
 
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v3
-        #with:
-        #  terraform_version: "1.2.7"
       
-      - name: 'Az CLI login'
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          enable-AzPSSession: true
+      # - name: 'Az CLI login'
+      #   uses: azure/login@v2
+      #   with:
+      #     client-id: ${{ secrets.AZURE_CLIENT_ID }}
+      #     tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+      #     subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      #     enable-AzPSSession: true
 
       - name: Terraform Init
         run: terraform init -backend-config="resource_group_name=tf-rg" -backend-config="storage_account_name=${{ secrets.TF_STATE_STORAGE_ACCOUNT }}" -backend-config="container_name=terraform"
@@ -108,7 +104,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: tfplan-dev
-          path: ./007_Containers
+          path: ./006_Diags
 
       - name: Terraform Apply
         run: terraform apply -auto-approve "./main-dev.tfplan"

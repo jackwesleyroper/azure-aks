@@ -6,13 +6,13 @@
 #   resource_group_name = local.monitoring_storage_account.resource_group_name
 # }
 
-# #######################################################################
-# #                    Log Analytics Workspace                          #
-# #######################################################################
-# data "azurerm_log_analytics_workspace" "monitoring_law" {
-#   name                = local.monitoring_law.name
-#   resource_group_name = local.monitoring_law.resource_group_name
-# }
+#######################################################################
+#                    Log Analytics Workspace                          #
+#######################################################################
+data "azurerm_log_analytics_workspace" "monitoring_law" {
+  name                = local.monitoring_law.name
+  resource_group_name = local.monitoring_law.resource_group_name
+}
 
 # #######################################################################
 # #                     Network Watcher Flow Logs                       #
@@ -43,34 +43,34 @@
 #   }
 # }
 
-# #######################################################################
-# #                  Monitor Diagnostic Settings Vnet                   #
-# #######################################################################
-# module "tf-azurerm-monitor-diagnostic-setting-vnet" {
-#   depends_on = [module.tf-azurerm-vnet]
-#   source     = "tf-azurerm-monitor-diagnostic-setting?ref=1.7"
-#   for_each   = local.diagnostic_settings_vnet
+#######################################################################
+#                  Monitor Diagnostic Settings Vnet                   #
+#######################################################################
+module "tf-azurerm-monitor-diagnostic-setting-vnet" {
+  depends_on = [module.tf-azurerm-vnet]
+  source     = "tf-azurerm-monitor-diagnostic-setting?ref=1.7"
+  for_each   = local.diagnostic_settings_vnet
 
-#   name                           = each.value.name
-#   target_resource_id             = module.tf-azurerm-vnet[each.value.target_resource_name].vnet_id
-#   log_analytics_workspace_id     = data.azurerm_log_analytics_workspace.monitoring_law.id
-#   log_analytics_destination_type = each.value.log_analytics_destination_type
-#   logs_category                  = each.value.logs_category
-#   metrics                        = each.value.metrics
-# }
+  name                           = each.value.name
+  target_resource_id             = module.tf-azurerm-vnet[each.value.target_resource_name].vnet_id
+  log_analytics_workspace_id     = data.azurerm_log_analytics_workspace.monitoring_law.id
+  log_analytics_destination_type = each.value.log_analytics_destination_type
+  logs_category                  = each.value.logs_category
+  metrics                        = each.value.metrics
+}
 
-# #######################################################################
-# #                  Monitor Diagnostic Settings NSG                    #
-# #######################################################################
-# module "tf-azurerm-monitor-diagnostic-setting-nsg" {
-#   depends_on = [module.tf-azurerm-network-security-group]
-#   source     = "tf-azurerm-monitor-diagnostic-setting?ref=1.7"
-#   for_each   = local.diagnostic_settings_nsg
+#######################################################################
+#                  Monitor Diagnostic Settings NSG                    #
+#######################################################################
+module "tf-azurerm-monitor-diagnostic-setting-nsg" {
+  depends_on = [module.tf-azurerm-network-security-group]
+  source     = "tf-azurerm-monitor-diagnostic-setting?ref=1.7"
+  for_each   = local.diagnostic_settings_nsg
 
-#   name                           = each.value.name
-#   target_resource_id             = module.tf-azurerm-network-security-group[each.value.target_resource_name].nsg_id
-#   log_analytics_workspace_id     = data.azurerm_log_analytics_workspace.monitoring_law.id
-#   log_analytics_destination_type = each.value.log_analytics_destination_type
-#   logs_category                  = each.value.logs_category
-#   metrics                        = each.value.metrics
-# }
+  name                           = each.value.name
+  target_resource_id             = module.tf-azurerm-network-security-group[each.value.target_resource_name].nsg_id
+  log_analytics_workspace_id     = data.azurerm_log_analytics_workspace.monitoring_law.id
+  log_analytics_destination_type = each.value.log_analytics_destination_type
+  logs_category                  = each.value.logs_category
+  metrics                        = each.value.metrics
+}

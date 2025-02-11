@@ -7,14 +7,13 @@ locals {
   #   resource_group_name = "mgmt-${var.config.regulation_longname}-aks-${var.config.location_shortname}-monitor-rg-001"
   # }
 
-  # #######################################################################
-  # #                    Log Analytics Workspace                          #
-  # #######################################################################
-  # monitoring_law = {
-  #   name                = "mgmt-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-law-001"
-  #   resource_group_name = "mgmt-${var.config.regulation_longname}-aks-${var.config.location_shortname}-monitor-rg-001"
-  #   location            = var.config.location_longname
-  # }
+  #######################################################################
+  #                    Log Analytics Workspace                          #
+  #######################################################################
+  monitoring_law = {
+    name                = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-law-001"
+    resource_group_name = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-rg-001"
+  }
 
   # #######################################################################
   # #                     Network Watcher Flow Logs                       #
@@ -66,146 +65,147 @@ locals {
   #   },
   # }
 
-  # #######################################################################
-  # #                   Monitor Diagnostic Settings Vnet                  #
-  # #######################################################################
-  # diagnostic_settings_vnet = {
-  #   "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-vnet-001" = {
-  #     name                           = "mgmt-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-law-001"
-  #     target_resource_name           = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-vnet-001"
-  #     log_analytics_destination_type = null
+  #######################################################################
+  #                   Monitor Diagnostic Settings Vnet                  #
+  #######################################################################
+  diagnostic_settings_vnet = {
+    "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-vnet-001" = {
+      name                           = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-law-001"
+      target_resource_name           = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-vnet-001"
+      log_analytics_destination_type = null
 
-  #     logs_category = {
-  #       "VMProtectionAlerts" = {
-  #         category = "VMProtectionAlerts"
-  #         enabled  = true
-  #         retention_policy = {
-  #           days    = 7
-  #           enabled = false
-  #         }
-  #       },
-  #     }
+      logs_category = {
+        "VMProtectionAlerts" = {
+          category = "VMProtectionAlerts"
+          enabled  = true
+          retention_policy = {
+            days    = 7
+            enabled = false
+          }
+        },
+      }
 
-  #     metrics = {
-  #       "AllMetrics" = {
-  #         category = "AllMetrics"
-  #         enabled  = true
-  #         retention_policy = {
-  #           days    = 7
-  #           enabled = false
-  #         }
-  #       },
-  #     }
-  #   }
-  # }
+      metrics = {
+        "AllMetrics" = {
+          category = "AllMetrics"
+          enabled  = true
+          retention_policy = {
+            days    = 7
+            enabled = false
+          }
+        },
+      }
+    }
+  }
 
-  # #######################################################################
-  # #                   Monitor Diagnostic Settings NSG                  #
-  # #######################################################################
-  # diagnostic_settings_nsg = {
-  #   "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-nsg-001" = {
-  #     name                           = "mgmt-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-law-001"
-  #     target_resource_name           = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-nsg-001"
-  #     log_analytics_destination_type = null
+  #######################################################################
+  #                   Monitor Diagnostic Settings NSG                  #
+  #######################################################################
+  diagnostic_settings_nsg = {
+    "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-nsg-001" = {
+      name                           = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-law-001"
+      target_resource_name           = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-nsg-001"
+      log_analytics_destination_type = null
 
-  #     logs_category = {
-  #       "NetworkSecurityGroupEvent" = {
-  #         category = "NetworkSecurityGroupEvent"
-  #         enabled  = true
-  #         retention_policy = {
-  #           days    = 7
-  #           enabled = false
-  #         }
-  #       },
-  #       "NetworkSecurityGroupRuleCounter" = {
-  #         category = "NetworkSecurityGroupRuleCounter"
-  #         enabled  = true
-  #         retention_policy = {
-  #           days    = 7
-  #           enabled = false
-  #         }
-  #       },
-  #     }
+      logs_category = {
+        "NetworkSecurityGroupEvent" = {
+          category = "NetworkSecurityGroupEvent"
+          enabled  = true
+          retention_policy = {
+            days    = 7
+            enabled = false
+          }
+        },
+        "NetworkSecurityGroupRuleCounter" = {
+          category = "NetworkSecurityGroupRuleCounter"
+          enabled  = true
+          retention_policy = {
+            days    = 7
+            enabled = false
+          }
+        },
+      }
 
-  #     metrics = {}
-  #   },
-  #   "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-nsg-002" = {
-  #     name                           = "mgmt-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-law-001"
-  #     target_resource_name           = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-nsg-002"
-  #     log_analytics_destination_type = null
+      metrics = {}
+    },
+    "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-nsg-002" = {
+      name                           = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-law-001"
+      target_resource_name           = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-nsg-002"
+      log_analytics_destination_type = null
 
-  #     logs_category = {
-  #       "NetworkSecurityGroupEvent" = {
-  #         category = "NetworkSecurityGroupEvent"
-  #         enabled  = true
-  #         retention_policy = {
-  #           days    = 7
-  #           enabled = false
-  #         }
-  #       },
-  #       "NetworkSecurityGroupRuleCounter" = {
-  #         category = "NetworkSecurityGroupRuleCounter"
-  #         enabled  = true
-  #         retention_policy = {
-  #           days    = 7
-  #           enabled = false
-  #         }
-  #       },
-  #     }
+      logs_category = {
+        "NetworkSecurityGroupEvent" = {
+          category = "NetworkSecurityGroupEvent"
+          enabled  = true
+          retention_policy = {
+            days    = 7
+            enabled = false
+          }
+        },
+        "NetworkSecurityGroupRuleCounter" = {
+          category = "NetworkSecurityGroupRuleCounter"
+          enabled  = true
+          retention_policy = {
+            days    = 7
+            enabled = false
+          }
+        },
+      }
 
-  #     metrics = {}
-  #   },
-  #   "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-privateendpoints-nsg-001" = {
-  #     name                           = "mgmt-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-law-001"
-  #     target_resource_name           = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-privateendpoints-nsg-001"
-  #     log_analytics_destination_type = null
+      metrics = {}
+    },
+    "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-privateendpoints-nsg-001" = {
+      name                           = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-law-001"
+      target_resource_name           = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-privateendpoints-nsg-001"
+      log_analytics_destination_type = null
 
-  #     logs_category = {
-  #       "NetworkSecurityGroupEvent" = {
-  #         category = "NetworkSecurityGroupEvent"
-  #         enabled  = true
-  #         retention_policy = {
-  #           days    = 7
-  #           enabled = false
-  #         }
-  #       },
-  #       "NetworkSecurityGroupRuleCounter" = {
-  #         category = "NetworkSecurityGroupRuleCounter"
-  #         enabled  = true
-  #         retention_policy = {
-  #           days    = 7
-  #           enabled = false
-  #         }
-  #       },
-  #     }
+      logs_category = {
+        "NetworkSecurityGroupEvent" = {
+          category = "NetworkSecurityGroupEvent"
+          enabled  = true
+          retention_policy = {
+            days    = 7
+            enabled = false
+          }
+        },
+        "NetworkSecurityGroupRuleCounter" = {
+          category = "NetworkSecurityGroupRuleCounter"
+          enabled  = true
+          retention_policy = {
+            days    = 7
+            enabled = false
+          }
+        },
+      }
 
-  #     metrics = {}
-  #   },
-  #   "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-privateendpoints-nsg-002" = {
-  #     name                           = "mgmt-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-law-001"
-  #     target_resource_name           = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-privateendpoints-nsg-002"
-  #     log_analytics_destination_type = null
+      metrics = {}
+    },
+    "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-compute-nsg-001" = {
+      name                           = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-law-001"
+      target_resource_name           = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-compute-nsg-001"
+      log_analytics_destination_type = null
 
-  #     logs_category = {
-  #       "NetworkSecurityGroupEvent" = {
-  #         category = "NetworkSecurityGroupEvent"
-  #         enabled  = true
-  #         retention_policy = {
-  #           days    = 7
-  #           enabled = false
-  #         }
-  #       },
-  #       "NetworkSecurityGroupRuleCounter" = {
-  #         category = "NetworkSecurityGroupRuleCounter"
-  #         enabled  = true
-  #         retention_policy = {
-  #           days    = 7
-  #           enabled = false
-  #         }
-  #       },
-  #     }
+      logs_category = {
+        "NetworkSecurityGroupEvent" = {
+          category = "NetworkSecurityGroupEvent"
+          enabled  = true
+          retention_policy = {
+            days    = 7
+            enabled = false
+          }
+        },
+        "NetworkSecurityGroupRuleCounter" = {
+          category = "NetworkSecurityGroupRuleCounter"
+          enabled  = true
+          retention_policy = {
+            days    = 7
+            enabled = false
+          }
+        },
+      }
 
-  #     metrics = {}
-  #   },
+      metrics = {}
+    },
+  }
 
 }
