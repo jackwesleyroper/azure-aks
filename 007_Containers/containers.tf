@@ -53,11 +53,12 @@ module "tf-azurerm-container-registry" {
   admin_enabled                 = each.value.admin_enabled
   public_network_access_enabled = each.value.public_network_access_enabled
   zone_redundancy_enabled       = each.value.zone_redundancy_enabled
+  retention_policy_in_days      = each.value.retention_policy_in_days
+  trust_policy_enabled          = each.value.trust_policy_enabled
   anonymous_pull_enabled        = each.value.anonymous_pull_enabled
   data_endpoint_enabled         = each.value.data_endpoint_enabled
   identity                      = each.value.identity
   identity_ids                  = [module.tf-azurerm-user-assigned-identity[each.value.identity_name].identity_id]
-  encryption_enabled            = each.value.encryption_enabled
   key_vault_name                = each.value.key_vault_name
   key_vault_resource_group_name = each.value.key_vault_resource_group_name
   key_vault_key_name            = each.value.key_vault_key_name
@@ -195,7 +196,7 @@ module "tf-azurerm-kubernetes-cluster" {
   dns_prefix_private_cluster    = each.value.dns_prefix_private_cluster
   public_network_access_enabled = each.value.public_network_access_enabled
   private_dns_zone_id           = data.azurerm_private_dns_zone.private_dns_zone_aks.id
-  automatic_channel_upgrade     = each.value.automatic_channel_upgrade
+  automatic_upgrade_channel     = each.value.automatic_upgrade_channel
   azure_policy_enabled          = each.value.azure_policy_enabled
   kubernetes_version            = each.value.kubernetes_version
   sku_tier                      = each.value.sku_tier
@@ -213,8 +214,8 @@ module "tf-azurerm-kubernetes-cluster" {
   default_node_pool_name                       = each.value.default_node_pool_name
   default_node_pool_vm_size                    = each.value.default_node_pool_vm_size
   default_node_pool_type                       = each.value.default_node_pool_type
-  default_node_pool_enable_auto_scaling        = each.value.default_node_pool_enable_auto_scaling
-  default_node_pool_enable_node_public_ip      = each.value.default_node_pool_enable_node_public_ip
+  default_node_pool_auto_scaling_enabled       = each.value.default_node_pool_auto_scaling_enabled
+  default_node_pool_node_public_ip_enabled     = each.value.default_node_pool_node_public_ip_enabled
   default_node_pool_max_pods                   = each.value.default_node_pool_max_pods
   default_node_pool_os_disk_size_gb            = each.value.default_node_pool_os_disk_size_gb
   default_node_pool_os_disk_type               = each.value.default_node_pool_os_disk_type
@@ -243,8 +244,6 @@ module "tf-azurerm-kubernetes-cluster" {
   microsoft_defender_log_analytics_workspace_id = data.azurerm_log_analytics_workspace.microsoft_defender_log_analytics_workspace[each.value.name].id
   api_server_access_profile = {
     authorized_ip_ranges     = each.value.api_server_access_profile.authorized_ip_ranges
-    subnet_id                = data.azurerm_subnet.subnet_aks_api_server[each.value.name].id
-    vnet_integration_enabled = each.value.api_server_access_profile.vnet_integration_enabled
   }
   linux_profile                                    = each.value.linux_profile
   linux_profile_ssh_key_key_data                   = tls_private_key.private_key.public_key_openssh

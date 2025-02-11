@@ -28,11 +28,12 @@ locals {
       admin_enabled                 = true
       public_network_access_enabled = true # change to deny when build agents in place
       zone_redundancy_enabled       = true
+      retention_policy_in_days      = 7
+      trust_policy_enabled          = false
       anonymous_pull_enabled        = false
       data_endpoint_enabled         = true
       identity                      = "UserAssigned"
       identity_name                 = "${var.config.environment_longname}${var.config.regulation_shortname}aks${var.config.location_shortname}acr001-id-001"
-      encryption_enabled            = true
       key_vault_name                = "${var.config.environment_longname}-${var.config.regulation_shortname}-aks-${var.config.location_shortname}-core-kv-1"
       key_vault_resource_group_name = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-rg-001"
       key_vault_key_name            = "${var.config.environment_longname}${var.config.regulation_shortname}aks${var.config.location_shortname}acr001-cos-cmk-001"
@@ -76,7 +77,7 @@ locals {
       dns_prefix_private_cluster                   = "${var.config.environment_longname}${var.config.regulation_shortname}aks${var.config.location_shortname}aks001"
       public_network_access_enabled                = false
       private_dns_zone_id                          = "System"
-      automatic_channel_upgrade                    = "node-image"
+      automatic_upgrade_channel                    = "patch"
       azure_policy_enabled                         = true
       kubernetes_version                           = var.config.kubernetes_version
       sku_tier                                     = "Free"
@@ -86,8 +87,8 @@ locals {
       default_node_pool_name                       = "agentpool"
       default_node_pool_vm_size                    = "Standard_B4ms"
       default_node_pool_type                       = "VirtualMachineScaleSets"
-      default_node_pool_enable_auto_scaling        = true
-      default_node_pool_enable_node_public_ip      = false
+      default_node_pool_auto_scaling_enabled       = true
+      default_node_pool_node_public_ip_enabled     = false
       default_node_pool_max_pods                   = 20
       default_node_pool_os_disk_size_gb            = 128
       default_node_pool_os_disk_type               = "Managed"
@@ -105,11 +106,10 @@ locals {
       user_assigned_identity_id                    = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-001-id-001"
 
       api_server_access_profile = {
-        authorized_ip_ranges            = ["82.42.167.128"]
+        authorized_ip_ranges            = null
         subnet_name                     = "${var.config.environment_longname}-aks-snet-002"
         subnet_vnet_name                = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-vnet-001"
         vnet_subnet_resource_group_name = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-network-rg-001"
-        vnet_integration_enabled        = true
       }
 
       default_node_pool_subnet = "${var.config.environment_longname}-aks-snet-001"
@@ -129,8 +129,6 @@ locals {
         network_mode          = null
         network_policy        = "azure"
         dns_service_ip        = var.config.dns_service_ip
-        docker_bridge_cidr    = var.config.docker_bridge_cidr
-        ebpf_data_plane       = null
         network_plugin_mode   = null
         outbound_type         = "loadBalancer"
         pod_cidr              = null
