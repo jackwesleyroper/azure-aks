@@ -56,6 +56,16 @@ locals {
       private_link_service_network_policies_enabled = false
       delegation                                    = {}
     },
+    "${var.config.environment_longname}-compute-snet-001" = {
+      resource_group_name                           = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-network-rg-001"
+      vnet_name                                     = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-vnet-001"
+      name                                          = "${var.config.environment_longname}-compute-snet-001"
+      address_prefixes                              = [var.config.compute_cidr]
+      service_endpoints                             = null
+      private_endpoint_network_policies_enabled     = "Enabled"
+      private_link_service_network_policies_enabled = false
+      delegation                                    = {}
+    },
   }
 
   #######################################################################
@@ -84,14 +94,14 @@ locals {
         },
         {
           name                         = "out_tcp_akscluster_to_aksapi"
-          priority                     = 140
+          priority                     = 120
           direction                    = "Outbound"
           access                       = "Allow"
           protocol                     = "Tcp"
           source_port_ranges           = ["*"]
           destination_port_ranges      = ["*"]
           source_address_prefixes      = [var.config.aks1_cidr]
-          destination_address_prefixes = [var.config.aks2_cidr, var.config.aks3_cidr]
+          destination_address_prefixes = [var.config.aks2_cidr]
           description                  = "Allow aks cluster to aks api"
         },
         {
@@ -262,7 +272,7 @@ locals {
         },
         {
           name                         = "out_tcp_aksapi_to_akscluster"
-          priority                     = 140
+          priority                     = 120
           direction                    = "Outbound"
           access                       = "Allow"
           protocol                     = "Tcp"
@@ -489,7 +499,7 @@ locals {
         # inbound rules
         {
           name                         = "in_tcp_${var.config.environment_longname}_aks_001_to_${var.config.environment_longname}_privateendpoints"
-          priority                     = 140
+          priority                     = 110
           direction                    = "Inbound"
           access                       = "Allow"
           protocol                     = "Tcp"
@@ -501,7 +511,7 @@ locals {
         },
         {
           name                         = "in_tcp_${var.config.environment_longname}_aks_002_to_${var.config.environment_longname}_privateendpoints"
-          priority                     = 150
+          priority                     = 120
           direction                    = "Inbound"
           access                       = "Allow"
           protocol                     = "Tcp"
@@ -573,6 +583,184 @@ locals {
         }
       ]
     },
+    "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-compute-nsg-001" = {
+      name                = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-compute-nsg-001"
+      subnet_name         = "${var.config.environment_longname}-compute-snet-001"
+      resource_group_name = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-network-rg-001"
+      location            = var.config.location_longname
+      nsg_rules = [
+        # outbound rules
+        {
+          name                         = "out_tcp_${var.config.environment_longname}_compute_to_${var.config.environment_longname}_privateendpoints"
+          priority                     = 110
+          direction                    = "Outbound"
+          access                       = "Allow"
+          protocol                     = "Tcp"
+          source_port_ranges           = ["*"]
+          destination_port_ranges      = ["443", "445", "5671", "5672"]
+          source_address_prefixes      = [var.config.compute_cidr]
+          destination_address_prefixes = [var.config.privateendpoints1_cidr]
+          description                  = "Allow compute to privateendpoints"
+        },
+        {
+          name                         = "out_tcp_akscluster_to_aksapi"
+          priority                     = 120
+          direction                    = "Outbound"
+          access                       = "Allow"
+          protocol                     = "Tcp"
+          source_port_ranges           = ["*"]
+          destination_port_ranges      = ["*"]
+          source_address_prefixes      = [var.config.compute_cidr]
+          destination_address_prefixes = [var.config.aks2_cidr]
+          description                  = "Allow aks cluster to aks api"
+        },
+        {
+          name                         = "allow_intra_subnet_outbound"
+          priority                     = 4092
+          direction                    = "Outbound"
+          access                       = "Allow"
+          protocol                     = "*"
+          source_port_ranges           = ["*"]
+          destination_port_ranges      = ["*"]
+          source_address_prefixes      = [var.config.compute_cidr]
+          destination_address_prefixes = [var.config.aks1_cidr]
+          description                  = "Allow all intra subnet traffic"
+        },
+        {
+          name                         = "deny_intra_vnet_outbound"
+          priority                     = 4093
+          direction                    = "Outbound"
+          access                       = "Deny"
+          protocol                     = "*"
+          source_port_ranges           = ["*"]
+          destination_port_ranges      = ["*"]
+          source_address_prefixes      = [var.config.vnet_cidr]
+          destination_address_prefixes = [var.config.vnet_cidr]
+          description                  = "Deny all which does not match previous rules"
+        },
+        {
+          name                         = "allow_inter_vnet_outbound"
+          priority                     = 4094
+          direction                    = "Outbound"
+          access                       = "Allow"
+          protocol                     = "*"
+          source_port_ranges           = ["*"]
+          destination_port_ranges      = ["*"]
+          source_address_prefixes      = ["VirtualNetwork"]
+          destination_address_prefixes = ["VirtualNetwork"]
+          description                  = "Allow all inter VNET traffic"
+        },
+        {
+          name                         = "allow_internet_outbound"
+          priority                     = 4095
+          direction                    = "Outbound"
+          access                       = "Allow"
+          protocol                     = "Tcp"
+          source_port_ranges           = ["*"]
+          destination_port_ranges      = ["80", "443"]
+          source_address_prefixes      = [var.config.vnet_cidr]
+          destination_address_prefixes = ["Internet"]
+          description                  = "Allow all internet traffic to the firewall"
+        },
+        {
+          name                         = "deny_all_outbound"
+          priority                     = 4096
+          direction                    = "Outbound"
+          access                       = "Deny"
+          protocol                     = "*"
+          source_port_ranges           = ["*"]
+          destination_port_ranges      = ["*"]
+          source_address_prefixes      = ["*"]
+          destination_address_prefixes = ["*"]
+          description                  = "Deny All Outbound Traffic"
+        },
+        # inbound rules
+        {
+          name                         = "in_tcp_${var.config.environment_longname}_privateendpoints_to_${var.config.environment_longname}_compute_cidr"
+          priority                     = 110
+          direction                    = "Inbound"
+          access                       = "Allow"
+          protocol                     = "Tcp"
+          source_port_ranges           = ["*"]
+          destination_port_ranges      = ["443"]
+          source_address_prefixes      = [var.config.privateendpoints1_cidr]
+          destination_address_prefixes = [var.config.compute_cidr]
+          description                  = "Allow privateendpoints to compute"
+        },
+        {
+          name                         = "in_tcp_aksapi_to_compute"
+          priority                     = 120
+          direction                    = "Inbound"
+          access                       = "Allow"
+          protocol                     = "Tcp"
+          source_port_ranges           = ["*"]
+          destination_port_ranges      = ["*"]
+          source_address_prefixes      = [var.config.aks2_cidr]
+          destination_address_prefixes = [var.config.compute_cidr]
+          description                  = "Allow aks api to compute"
+        },
+        {
+          name                         = "allow_intra_subnet_inbound"
+          priority                     = 4092
+          direction                    = "Inbound"
+          access                       = "Allow"
+          protocol                     = "*"
+          source_port_ranges           = ["*"]
+          destination_port_ranges      = ["*"]
+          source_address_prefixes      = [var.config.aks1_cidr]
+          destination_address_prefixes = [var.config.aks1_cidr]
+          description                  = "Allow all intra subnet traffic"
+        },
+        {
+          name                         = "deny_intra_vnet_inbound"
+          priority                     = 4093
+          direction                    = "Inbound"
+          access                       = "Deny"
+          protocol                     = "*"
+          source_port_ranges           = ["*"]
+          destination_port_ranges      = ["*"]
+          source_address_prefixes      = [var.config.vnet_cidr]
+          destination_address_prefixes = [var.config.vnet_cidr]
+          description                  = "Deny all which does not match previous rules"
+        },
+        {
+          name                         = "allow_inter_vnet_inbound"
+          priority                     = 4094
+          direction                    = "Inbound"
+          access                       = "Allow"
+          protocol                     = "*"
+          source_port_ranges           = ["*"]
+          destination_port_ranges      = ["*"]
+          source_address_prefixes      = ["VirtualNetwork"]
+          destination_address_prefixes = ["VirtualNetwork"]
+          description                  = "Allow all inter VNET traffic"
+        },
+        {
+          name                         = "allow_azureloadbalancer_inbound"
+          priority                     = 4095
+          direction                    = "Inbound"
+          access                       = "Allow"
+          protocol                     = "*"
+          source_port_ranges           = ["*"]
+          destination_port_ranges      = ["*"]
+          source_address_prefixes      = ["AzureLoadBalancer"]
+          destination_address_prefixes = ["*"]
+          description                  = "Suppress AzureLoadBalancer warning on the DenyAllInBound Rule"
+        },
+        {
+          name                         = "deny_all_inbound"
+          priority                     = 4096
+          direction                    = "Inbound"
+          access                       = "Deny"
+          protocol                     = "*"
+          source_port_ranges           = ["*"]
+          destination_port_ranges      = ["*"]
+          source_address_prefixes      = ["*"]
+          destination_address_prefixes = ["*"]
+          description                  = "Deny All Inbound Traffic"
+        }
+      ]
+    },
   }
 
   #######################################################################
@@ -590,6 +778,14 @@ locals {
     "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-privateendpoints-rt-001" = {
       name                          = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-privateendpoints-rt-001"
       associated_subnets            = ["${var.config.environment_longname}-privateendpoints-snet-001"]
+      resource_group_name           = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-network-rg-001"
+      location                      = var.config.location_longname
+      bgp_route_propagation_enabled = false
+      routes                        = {}
+    },
+    "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-compute-rt-001" = {
+      name                          = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-compute-rt-001"
+      associated_subnets            = ["${var.config.environment_longname}-compute-snet-001"]
       resource_group_name           = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-network-rg-001"
       location                      = var.config.location_longname
       bgp_route_propagation_enabled = false

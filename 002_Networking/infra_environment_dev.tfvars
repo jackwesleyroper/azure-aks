@@ -7,6 +7,6 @@ config = {
   vnet_cidr              = "172.16.0.0/22"
   aks1_cidr              = "172.16.0.0/23"
   aks2_cidr              = "172.16.2.0/28"
-  aks3_cidr              = "172.16.2.16/28"
   privateendpoints1_cidr = "172.16.3.0/26"
+  compute_cidr           = "172.16.3.128/26"
 }
