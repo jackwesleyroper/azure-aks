@@ -48,7 +48,7 @@ data "azurerm_log_analytics_workspace" "monitoring_law" {
 #######################################################################
 module "tf-azurerm-monitor-diagnostic-setting-vnet" {
   depends_on = [module.tf-azurerm-vnet]
-  source     = "tf-azurerm-monitor-diagnostic-setting?ref=1.7"
+  source     = "github.com/jackwesleyroper/tf-azurerm-monitor-diagnostic-setting"
   for_each   = local.diagnostic_settings_vnet
 
   name                           = each.value.name
@@ -64,7 +64,7 @@ module "tf-azurerm-monitor-diagnostic-setting-vnet" {
 #######################################################################
 module "tf-azurerm-monitor-diagnostic-setting-nsg" {
   depends_on = [module.tf-azurerm-network-security-group]
-  source     = "tf-azurerm-monitor-diagnostic-setting?ref=1.7"
+  source     = "github.com/jackwesleyroper/tf-azurerm-monitor-diagnostic-setting"
   for_each   = local.diagnostic_settings_nsg
 
   name                           = each.value.name
