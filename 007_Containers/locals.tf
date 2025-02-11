@@ -98,14 +98,14 @@ locals {
       default_node_pool_min_count                  = 3
       default_node_pool_node_count                 = 3
       default_node_pool_orchestrator_version       = var.config.default_node_pool_orchestrator_version
-      default_node_pool_upgrade_settings_max_surge = "6"
+      default_node_pool_upgrade_settings_max_surge = "3"
       kubelet_identity                             = true
       client_id                                    = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-001-id-001"
       object_id                                    = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-001-id-001"
       user_assigned_identity_id                    = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-001-id-001"
 
       api_server_access_profile = {
-        authorized_ip_ranges            = null
+        authorized_ip_ranges            = ["82.42.167.128"]
         subnet_name                     = "${var.config.environment_longname}-aks-snet-002"
         subnet_vnet_name                = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-vnet-001"
         vnet_subnet_resource_group_name = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-network-rg-001"
