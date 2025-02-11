@@ -243,7 +243,7 @@ module "tf-azurerm-kubernetes-cluster" {
   oms_agent_log_analytics_workspace_id          = data.azurerm_log_analytics_workspace.oms_agent_log_analytics_workspace[each.value.name].id
   microsoft_defender_log_analytics_workspace_id = data.azurerm_log_analytics_workspace.microsoft_defender_log_analytics_workspace[each.value.name].id
   api_server_access_profile = {
-    authorized_ip_ranges     = each.value.api_server_access_profile.authorized_ip_ranges
+    authorized_ip_ranges = each.value.api_server_access_profile.authorized_ip_ranges
   }
   linux_profile                                    = each.value.linux_profile
   linux_profile_ssh_key_key_data                   = tls_private_key.private_key.public_key_openssh
