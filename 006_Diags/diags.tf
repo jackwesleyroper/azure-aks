@@ -34,34 +34,34 @@ data "azurerm_virtual_network" "vnets" {
   resource_group_name = each.value.resource_group_name
 }
 
-# #######################################################################
-# #                     Network Watcher Flow Logs                       #
-# #######################################################################
-# module "tf-azurerm-network-watcher-flow-log" {
-#   source                                = "tf-azurerm-network-watcher-flow-log?ref=1.1"
-#   for_each                              = local.network_watcher_flow_logs
-#   name                                  = each.value.name
-#   network_watcher_name                  = each.value.network_watcher_name
-#   resource_group_name                   = each.value.resource_group_name
-#   nsg_id                                = module.tf-azurerm-network-security-group[each.value.nsg_name].nsg_id
-#   storage_account_id                    = data.azurerm_storage_account.monitoring_storage_account.id
-#   enabled                               = each.value.enabled
-#   retention_policy_enabled              = each.value.retention_policy_enabled
-#   retention_policy_days                 = each.value.retention_policy_days
-#   traffic_analytics_enabled             = each.value.traffic_analytics_enabled
-#   log_analytics_workspace_id            = data.azurerm_log_analytics_workspace.monitoring_law.workspace_id
-#   log_analytics_location                = local.monitoring_law.location
-#   log_analytics_resource_id             = data.azurerm_log_analytics_workspace.monitoring_law.id
-#   traffic_analytics_interval_in_minutes = each.value.traffic_analytics_interval_in_minutes
+#######################################################################
+#                     Network Watcher Flow Logs                       #
+#######################################################################
+module "tf-azurerm-network-watcher-flow-log" {
+  source                                = "github.com/jackwesleyroper/tf-azurerm-network-watcher-flow-log"
+  for_each                              = local.network_watcher_flow_logs
+  name                                  = each.value.name
+  network_watcher_name                  = each.value.network_watcher_name
+  resource_group_name                   = each.value.resource_group_name
+  target_resource_id                    = data.azurerm_network_security_group.nsgs[each.value.target_resource_name].id
+  storage_account_id                    = data.azurerm_storage_account.monitoring_storage_account[each.value.name].id
+  enabled                               = each.value.enabled
+  retention_policy_enabled              = each.value.retention_policy_enabled
+  retention_policy_days                 = each.value.retention_policy_days
+  traffic_analytics_enabled             = each.value.traffic_analytics_enabled
+  log_analytics_workspace_id            = data.azurerm_log_analytics_workspace.laws[each.value.name].workspace_id
+  log_analytics_location                = var.config.location_longname
+  log_analytics_resource_id             = data.azurerm_log_analytics_workspace.laws[each.value.name].id
+  traffic_analytics_interval_in_minutes = each.value.traffic_analytics_interval_in_minutes
 
-#   tags = {
-#     Name               = each.value.name
-#     "Environment_Type" = var.config.environment_longname
-#     Service            = "AKS"
-#     Owner              = "Jack Roper"
-#     "Resource_Purpose" = "Network Watcher Flow Log"
-#   }
-# }
+  tags = {
+    Name               = each.value.name
+    "Environment_Type" = var.config.environment_longname
+    Service            = "AKS"
+    Owner              = "Jack Roper"
+    "Resource_Purpose" = "Network Watcher Flow Log"
+  }
+}
 
 #######################################################################
 #                  Monitor Diagnostic Settings Vnet                   #
