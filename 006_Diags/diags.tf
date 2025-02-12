@@ -32,7 +32,6 @@ data "azurerm_virtual_network" "vnets" {
   resource_group_name = each.value.resource_group_name
 }
 
-
 # #######################################################################
 # #                     Network Watcher Flow Logs                       #
 # #######################################################################
@@ -69,7 +68,7 @@ module "tf-azurerm-monitor-diagnostic-setting-vnet" {
   source                         = "github.com/jackwesleyroper/tf-azurerm-monitor-diagnostic-setting"
   for_each                       = local.diagnostic_settings_vnet
   name                           = each.value.name
-  target_resource_id             = data.azurerm_virtual_network.vnets[each.value.target_resource_name].vnet_id
+  target_resource_id             = data.azurerm_virtual_network.vnets[each.value.target_resource_name].id
   log_analytics_workspace_id     = data.azurerm_log_analytics_workspace.monitoring_law.id
   log_analytics_destination_type = each.value.log_analytics_destination_type
   logs_category                  = each.value.logs_category
@@ -83,7 +82,7 @@ module "tf-azurerm-monitor-diagnostic-setting-nsg" {
   source                         = "github.com/jackwesleyroper/tf-azurerm-monitor-diagnostic-setting"
   for_each                       = local.diagnostic_settings_nsg
   name                           = each.value.name
-  target_resource_id             = data.azurerm_network_security_group.nsgs[each.value.name].nsg_id
+  target_resource_id             = data.azurerm_network_security_group.nsgs[each.value.target_resource_name].nsg_id
   log_analytics_workspace_id     = data.azurerm_log_analytics_workspace.monitoring_law.id
   log_analytics_destination_type = each.value.log_analytics_destination_type
   logs_category                  = each.value.logs_category
