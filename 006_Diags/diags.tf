@@ -43,7 +43,7 @@ module "tf-azurerm-network-watcher-flow-log" {
   name                                  = each.value.name
   network_watcher_name                  = each.value.network_watcher_name
   resource_group_name                   = each.value.resource_group_name
-  target_resource_id                    = data.azurerm_network_security_group.nsgs[each.value.target_resource_name].id
+  target_resource_id                    = data.azurerm_network_security_group.nsgs[each.value.nsg_name].id
   storage_account_id                    = data.azurerm_storage_account.monitoring_storage_account[each.value.name].id
   enabled                               = each.value.enabled
   retention_policy_enabled              = each.value.retention_policy_enabled
