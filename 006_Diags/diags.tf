@@ -1,17 +1,19 @@
-# #######################################################################
-# #                        Storage Account                              #
-# #######################################################################
-# data "azurerm_storage_account" "monitoring_storage_account" {
-#   name                = local.monitoring_storage_account.name
-#   resource_group_name = local.monitoring_storage_account.resource_group_name
-# }
+#######################################################################
+#                        Storage Account                              #
+#######################################################################
+data "azurerm_storage_account" "monitoring_storage_account" {
+  for_each            = local.monitoring_storage_account
+  name                = each.value.name
+  resource_group_name = each.value.resource_group_name
+}
 
 #######################################################################
-#                    Log Analytics Workspace                          #
+#                    Log Analytics Workspaces                         #
 #######################################################################
-data "azurerm_log_analytics_workspace" "monitoring_law" {
-  name                = local.monitoring_law.name
-  resource_group_name = local.monitoring_law.resource_group_name
+data "azurerm_log_analytics_workspace" "laws" {
+  for_each            = local.laws
+  name                = each.value.name
+  resource_group_name = each.value.resource_group_name
 }
 
 #######################################################################
@@ -69,7 +71,7 @@ module "tf-azurerm-monitor-diagnostic-setting-vnet" {
   for_each                       = local.diagnostic_settings_vnet
   name                           = each.value.name
   target_resource_id             = data.azurerm_virtual_network.vnets[each.value.target_resource_name].id
-  log_analytics_workspace_id     = data.azurerm_log_analytics_workspace.monitoring_law.id
+  log_analytics_workspace_id     = data.azurerm_log_analytics_workspace.laws[each.value.target_resource_name].id
   log_analytics_destination_type = each.value.log_analytics_destination_type
   logs_category                  = each.value.logs_category
   metrics                        = each.value.metrics
@@ -82,8 +84,8 @@ module "tf-azurerm-monitor-diagnostic-setting-nsg" {
   source                         = "github.com/jackwesleyroper/tf-azurerm-monitor-diagnostic-setting"
   for_each                       = local.diagnostic_settings_nsg
   name                           = each.value.name
-  target_resource_id             = data.azurerm_network_security_group.nsgs[each.value.target_resource_name].nsg_id
-  log_analytics_workspace_id     = data.azurerm_log_analytics_workspace.monitoring_law.id
+  target_resource_id             = data.azurerm_network_security_group.nsgs[each.value.target_resource_name].id
+  log_analytics_workspace_id     = data.azurerm_log_analytics_workspace.laws[each.value.target_resource_name].id
   log_analytics_destination_type = each.value.log_analytics_destination_type
   logs_category                  = each.value.logs_category
   metrics                        = each.value.metrics

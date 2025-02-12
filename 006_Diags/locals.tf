@@ -1,18 +1,22 @@
 locals {
-  # #######################################################################
-  # #                        Storage Account                              #
-  # #######################################################################
-  # monitoring_storage_account = {
-  #   name                = "mgmt${var.config.regulation_shortname}aks${var.config.location_shortname}logsstr001"
-  #   resource_group_name = "mgmt-${var.config.regulation_longname}-aks-${var.config.location_shortname}-monitor-rg-001"
-  # }
+  #######################################################################
+  #                        Storage Account                              #
+  #######################################################################
+  monitoring_storage_account = {
+    "${var.config.environment_shortname}${var.config.regulation_shortname}aks${var.config.location_shortname}logsstr001" = {
+      name                = "${var.config.environment_shortname}${var.config.regulation_shortname}aks${var.config.location_shortname}logsstr001"
+      resource_group_name = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-rg-001"
+    }
+  }
 
   #######################################################################
   #                    Log Analytics Workspace                          #
   #######################################################################
-  monitoring_law = {
-    name                = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-law-001"
-    resource_group_name = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-rg-001"
+  laws = {
+    "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-law-001" = {
+      name                = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-law-001"
+      resource_group_name = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-rg-001"
+    }
   }
 
   #######################################################################
