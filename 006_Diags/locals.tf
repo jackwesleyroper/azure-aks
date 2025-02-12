@@ -60,7 +60,7 @@ locals {
     "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-nwfl-001" = {
       name                                  = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-nwfl-001"
       network_watcher_name                  = "NetworkWatcher_${var.config.location_longname}"
-      resource_group_name                   = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-network-rg-001"
+      resource_group_name                   = "NetworkWatcherRG"
       nsg_name                              = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-nsg-001"
       enabled                               = true
       retention_policy_enabled              = true
@@ -73,7 +73,7 @@ locals {
     "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-nwfl-002" = {
       name                                  = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-nwfl-002"
       network_watcher_name                  = "NetworkWatcher_${var.config.location_longname}"
-      resource_group_name                   = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-network-rg-001"
+      resource_group_name                   = "NetworkWatcherRG"
       nsg_name                              = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-nsg-002"
       enabled                               = true
       retention_policy_enabled              = true
@@ -86,7 +86,7 @@ locals {
     "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-privateendpoints-nwfl-001" = {
       name                                  = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-privateendpoints-nwfl-001"
       network_watcher_name                  = "NetworkWatcher_${var.config.location_longname}"
-      resource_group_name                   = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-network-rg-001"
+      resource_group_name                   = "NetworkWatcherRG"
       nsg_name                              = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-privateendpoints-nsg-001"
       enabled                               = true
       retention_policy_enabled              = true
@@ -99,7 +99,7 @@ locals {
     "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-compute-nwfl-001" = {
       name                                  = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-compute-nwfl-001"
       network_watcher_name                  = "NetworkWatcher_${var.config.location_longname}"
-      resource_group_name                   = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-network-rg-001"
+      resource_group_name                   = "NetworkWatcherRG"
       nsg_name                              = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-compute-nsg-001"
       enabled                               = true
       retention_policy_enabled              = true
