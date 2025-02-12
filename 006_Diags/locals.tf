@@ -67,6 +67,8 @@ locals {
       retention_policy_days                 = 90
       traffic_analytics_enabled             = true
       traffic_analytics_interval_in_minutes = 10
+      storage_account_name                  = "${var.config.environment_shortname}${var.config.regulation_shortname}aks${var.config.location_shortname}logsstr001"
+      law_name                              = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-law-001"   
     },
     "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-nwfl-002" = {
       name                                  = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-nwfl-002"
@@ -78,6 +80,8 @@ locals {
       retention_policy_days                 = 90
       traffic_analytics_enabled             = true
       traffic_analytics_interval_in_minutes = 10
+      storage_account_name                  = "${var.config.environment_shortname}${var.config.regulation_shortname}aks${var.config.location_shortname}logsstr001"
+      law_name                              = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-law-001"   
     },
     "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-privateendpoints-nwfl-001" = {
       name                                  = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-privateendpoints-nwfl-001"
@@ -89,6 +93,8 @@ locals {
       retention_policy_days                 = 90
       traffic_analytics_enabled             = true
       traffic_analytics_interval_in_minutes = 10
+      storage_account_name                  = "${var.config.environment_shortname}${var.config.regulation_shortname}aks${var.config.location_shortname}logsstr001"
+      law_name                              = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-law-001"   
     },
     "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-compute-nwfl-001" = {
       name                                  = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-compute-nwfl-001"
@@ -100,6 +106,8 @@ locals {
       retention_policy_days                 = 90
       traffic_analytics_enabled             = true
       traffic_analytics_interval_in_minutes = 10
+      storage_account_name                  = "${var.config.environment_shortname}${var.config.regulation_shortname}aks${var.config.location_shortname}logsstr001"
+      law_name                              = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-law-001"   
     },
   }
 

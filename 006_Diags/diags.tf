@@ -44,14 +44,14 @@ module "tf-azurerm-network-watcher-flow-log" {
   network_watcher_name                  = each.value.network_watcher_name
   resource_group_name                   = each.value.resource_group_name
   target_resource_id                    = data.azurerm_network_security_group.nsgs[each.value.nsg_name].id
-  storage_account_id                    = data.azurerm_storage_account.monitoring_storage_account[local.monitoring_storage_account.name].id
+  storage_account_id                    = data.azurerm_storage_account.monitoring_storage_account[each.value.storage_account_name].id
   enabled                               = each.value.enabled
   retention_policy_enabled              = each.value.retention_policy_enabled
   retention_policy_days                 = each.value.retention_policy_days
   traffic_analytics_enabled             = each.value.traffic_analytics_enabled
-  log_analytics_workspace_id            = data.azurerm_log_analytics_workspace.laws[local.laws.name].workspace_id
+  log_analytics_workspace_id            = data.azurerm_log_analytics_workspace.laws[each.value.law_name].workspace_id
   log_analytics_location                = var.config.location_longname
-  log_analytics_resource_id             = data.azurerm_log_analytics_workspace.laws[local.laws.name].id
+  log_analytics_resource_id             = data.azurerm_log_analytics_workspace.laws[each.value.law_name].id
   traffic_analytics_interval_in_minutes = each.value.traffic_analytics_interval_in_minutes
 
   tags = {
