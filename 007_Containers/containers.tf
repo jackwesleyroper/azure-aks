@@ -187,7 +187,7 @@ module "role_assignment_aks" {
 }
 
 module "tf-azurerm-kubernetes-cluster" {
-  source                        = "github.com/jackwesleyroper/tf-azurerm-azure-kubernetes-cluster?v1.0.0"
+  source                        = "git::https://github.com/jackwesleyroper/tf-azurerm-azure-kubernetes-cluster.git?ref=v1.0.0"
   depends_on                    = [module.role_assignment_aks, module.tf-azurerm-role-assignment-aks-vnet, tls_private_key.private_key]
   for_each                      = local.kubernetes_cluster
   resource_group_name           = each.value.resource_group_name
