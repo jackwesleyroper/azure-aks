@@ -71,7 +71,7 @@ module "tf-azurerm-monitor-diagnostic-setting-vnet" {
   for_each                       = local.diagnostic_settings_vnet
   name                           = each.value.name
   target_resource_id             = data.azurerm_virtual_network.vnets[each.value.target_resource_name].id
-  log_analytics_workspace_id     = data.azurerm_log_analytics_workspace.laws[each.value.target_resource_name].id
+  log_analytics_workspace_id     = data.azurerm_log_analytics_workspace.laws[each.value.name].id
   log_analytics_destination_type = each.value.log_analytics_destination_type
   logs_category                  = each.value.logs_category
   metrics                        = each.value.metrics
@@ -85,7 +85,7 @@ module "tf-azurerm-monitor-diagnostic-setting-nsg" {
   for_each                       = local.diagnostic_settings_nsg
   name                           = each.value.name
   target_resource_id             = data.azurerm_network_security_group.nsgs[each.value.target_resource_name].id
-  log_analytics_workspace_id     = data.azurerm_log_analytics_workspace.laws[each.value.target_resource_name].id
+  log_analytics_workspace_id     = data.azurerm_log_analytics_workspace.laws[each.value.name].id
   log_analytics_destination_type = each.value.log_analytics_destination_type
   logs_category                  = each.value.logs_category
   metrics                        = each.value.metrics
