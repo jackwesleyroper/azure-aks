@@ -2,7 +2,7 @@
 #                   Resource Groups                                   #
 #######################################################################
 module "resource_groups" {
-  source   = "github.com/jackwesleyroper/tf-azurerm-resource-group"
+  source   = "git::https://github.com/jackwesleyroper/tf-azurerm-resource-group.git"
   for_each = local.spoke_resource_groups
   name     = each.value.resource_group_name
   location = each.value.location

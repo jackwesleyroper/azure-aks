@@ -2,7 +2,7 @@
 #                   Log Analytics                                     #
 #######################################################################
 module "log_analytics" {
-  source                             = "github.com/jackwesleyroper/tf-azurerm-log-analytics-workspace"
+  source                             = "git::https://github.com/jackwesleyroper/tf-azurerm-log-analytics-workspace.git"
   for_each                           = local.log_analytics
   resource_group_name                = each.value.resource_group_name
   location                           = each.value.location
@@ -26,7 +26,7 @@ module "log_analytics" {
 #                               AMPLS                                 #
 #######################################################################
 module "ampls" {
-  source                = "github.com/jackwesleyroper/tf-azurerm-monitor-private-link-scope"
+  source                = "git::https://github.com/jackwesleyroper/tf-azurerm-monitor-private-link-scope.git"
   for_each              = local.ampls
   name                  = each.value.name
   rg_name               = each.value.resource_group_name
@@ -47,7 +47,7 @@ module "ampls" {
 #######################################################################
 module "ampls_service_law" {
   depends_on          = [module.ampls, module.log_analytics]
-  source              = "github.com/jackwesleyroper/tf-azurerm-monitor-private-link-scoped-service"
+  source              = "git::https://github.com/jackwesleyroper/tf-azurerm-monitor-private-link-scoped-service.git"
   for_each            = local.ampls_services_law
   name                = each.value.name
   resource_group_name = each.value.resource_group_name

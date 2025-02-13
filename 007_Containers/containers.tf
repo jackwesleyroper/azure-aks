@@ -4,7 +4,7 @@ data "azurerm_client_config" "current" {}
 #                      User Assigned Identity                         #
 #######################################################################
 module "tf-azurerm-user-assigned-identity" {
-  source                      = "github.com/jackwesleyroper/tf-azurerm-user-assigned-identity"
+  source                      = "git::https://github.com/jackwesleyroper/tf-azurerm-user-assigned-identity.git"
   for_each                    = local.user_assigned_identity
   resource_group_name         = each.value.resource_group_name
   location                    = each.value.location
@@ -29,7 +29,7 @@ data "azurerm_key_vault" "key_vault" {
 }
 
 module "tf-azurerm-key-vault-access-policy" {
-  source                  = "github.com/jackwesleyroper/tf-azurerm-key-vault-access-policy"
+  source                  = "git::https://github.com/jackwesleyroper/tf-azurerm-key-vault-access-policy.git"
   for_each                = local.key_vault_access_policy
   tenant_id               = each.value.tenant_id
   key_vault_id            = data.azurerm_key_vault.key_vault[each.value.object_name].id
@@ -44,7 +44,7 @@ module "tf-azurerm-key-vault-access-policy" {
 #                           Container registry                        #
 #######################################################################
 module "tf-azurerm-container-registry" {
-  source                        = "github.com/jackwesleyroper/tf-azurerm-container-registry"
+  source                        = "git::https://github.com/jackwesleyroper/tf-azurerm-container-registry.git"
   for_each                      = local.container_registry
   resource_group_name           = each.value.resource_group_name
   location                      = each.value.location
@@ -92,7 +92,7 @@ data "azurerm_private_dns_zone" "private_dns_zones" {
 }
 
 module "tf-azurerm-private-endpoint" {
-  source                          = "github.com/jackwesleyroper/tf-azurerm-private-endpoint"
+  source                          = "git::https://github.com/jackwesleyroper/tf-azurerm-private-endpoint.git"
   for_each                        = local.private_endpoints
   resource_group_name             = each.value.resource_group_name
   location                        = each.value.location
@@ -126,7 +126,7 @@ resource "tls_private_key" "private_key" {
 
 module "public_key_secret" {
   depends_on      = [tls_private_key.private_key]
-  source          = "github.com/jackwesleyroper/tf-azurerm-key-vault-secret"
+  source          = "git::https://github.com/jackwesleyroper/tf-azurerm-key-vault-secret.git"
   name            = local.key_vault_aks.openssh_public_key_name
   value           = tls_private_key.private_key.public_key_openssh
   expiration_date = local.key_vault_aks.expiration_date
@@ -180,7 +180,7 @@ data "azurerm_subnet" "subnet_aks_api_server" {
 }
 
 module "role_assignment_aks" {
-  source               = "github.com/jackwesleyroper/tf-azurerm-role-assignment"
+  source               = "git::https://github.com/jackwesleyroper/tf-azurerm-role-assignment.git"
   scope                = data.azurerm_private_dns_zone.private_dns_zone_aks.id
   role_definition_name = local.role_assignment_aks.role_definition_name
   principal_id         = module.tf-azurerm-user-assigned-identity[local.role_assignment_aks.user_assigned_identity_name].principal_id
@@ -254,7 +254,7 @@ module "tf-azurerm-kubernetes-cluster" {
 }
 
 module "tf-azurerm-key-vault-access-policy-aks" {
-  source                  = "github.com/jackwesleyroper/tf-azurerm-key-vault-access-policy"
+  source                  = "git::https://github.com/jackwesleyroper/tf-azurerm-key-vault-access-policy.git"
   depends_on              = [module.tf-azurerm-kubernetes-cluster]
   for_each                = local.key_vault_access_policy_aks
   tenant_id               = each.value.tenant_id
@@ -270,7 +270,7 @@ module "tf-azurerm-key-vault-access-policy-aks" {
 #                   ACR Role Assignment                               #
 #######################################################################
 module "tf-azurerm-role-assignment-acr" {
-  source                           = "github.com/jackwesleyroper/tf-azurerm-role-assignment"
+  source                           = "git::https://github.com/jackwesleyroper/tf-azurerm-role-assignment.git"
   for_each                         = local.role_assignment_acr
   scope                            = module.tf-azurerm-container-registry[each.value.scope_name].container_registry_id
   role_definition_name             = each.value.role_definition_name
@@ -282,7 +282,7 @@ module "tf-azurerm-role-assignment-acr" {
 #                       AKS Service Principal                         #
 #######################################################################
 module "tf-azurerm-service-principal-aks" {
-  source                       = "github.com/jackwesleyroper/tf-azuread-application"
+  source                       = "git::https://github.com/jackwesleyroper/tf-azuread-application.git"
   for_each                     = local.service_principal_aks
   application_display_name     = each.value.application_display_name
   app_role_assignment_required = each.value.app_role_assignment_required
@@ -298,7 +298,7 @@ module "tf-azurerm-service-principal-aks" {
 #######################################################################
 module "tf-azurerm-role-assignment-aks" {
   depends_on                       = [module.tf-azurerm-service-principal-aks]
-  source                           = "github.com/jackwesleyroper/tf-azurerm-role-assignment"
+  source                           = "git::https://github.com/jackwesleyroper/tf-azurerm-role-assignment.git"
   for_each                         = local.role_assignment_aks_sp
   scope                            = module.tf-azurerm-kubernetes-cluster[each.value.scope_name].kubernetes_cluster_id
   role_definition_name             = each.value.role_definition_name
@@ -321,7 +321,7 @@ data "azurerm_virtual_network" "vnet" {
 }
 
 module "tf-azurerm-role-assignment-aks-rg" {
-  source                           = "github.com/jackwesleyroper/tf-azurerm-role-assignment"
+  source                           = "git::https://github.com/jackwesleyroper/tf-azurerm-role-assignment.git"
   for_each                         = local.role_assignment_aks_rg
   scope                            = data.azurerm_resource_group.rg[each.value.scope_name].id
   role_definition_name             = each.value.role_definition_name
@@ -330,7 +330,7 @@ module "tf-azurerm-role-assignment-aks-rg" {
 }
 
 module "tf-azurerm-role-assignment-aks-vnet" {
-  source                           = "github.com/jackwesleyroper/tf-azurerm-role-assignment"
+  source                           = "git::https://github.com/jackwesleyroper/tf-azurerm-role-assignment.git"
   for_each                         = local.role_assignment_aks_vnet
   scope                            = data.azurerm_virtual_network.vnet[each.value.scope_name].id
   role_definition_name             = each.value.role_definition_name
@@ -351,7 +351,7 @@ data "azurerm_log_analytics_workspace" "log_analytics_workspace" {
 #########################################################################
 module "tf-azurerm-monitor-diagnostic-setting-container-registry" {
   depends_on                     = [module.tf-azurerm-container-registry]
-  source                         = "github.com/jackwesleyroper/tf-azurerm-monitor-diagnostic-setting"
+  source                         = "git::https://github.com/jackwesleyroper/tf-azurerm-monitor-diagnostic-setting.git"
   for_each                       = local.diagnostic_settings_container_registry
   name                           = each.value.name
   target_resource_id             = module.tf-azurerm-container-registry[each.value.target_resource_name].container_registry_id
@@ -363,7 +363,7 @@ module "tf-azurerm-monitor-diagnostic-setting-container-registry" {
 
 module "tf-azurerm-monitor-diagnostic-setting-aks" {
   depends_on                     = [module.tf-azurerm-kubernetes-cluster]
-  source                         = "github.com/jackwesleyroper/tf-azurerm-monitor-diagnostic-setting"
+  source                         = "git::https://github.com/jackwesleyroper/tf-azurerm-monitor-diagnostic-setting.git"
   for_each                       = local.diagnostic_settings_aks
   name                           = each.value.name
   target_resource_id             = module.tf-azurerm-kubernetes-cluster[each.value.target_resource_name].kubernetes_cluster_id
@@ -375,7 +375,7 @@ module "tf-azurerm-monitor-diagnostic-setting-aks" {
 
 module "tf-azurerm-monitor-diagnostic-setting-acr-private-endpoint" {
   depends_on                     = [module.tf-azurerm-private-endpoint]
-  source                         = "github.com/jackwesleyroper/tf-azurerm-monitor-diagnostic-setting"
+  source                         = "git::https://github.com/jackwesleyroper/tf-azurerm-monitor-diagnostic-setting.git"
   for_each                       = local.diagnostic_settings_private_endpoint
   name                           = each.value.name
   target_resource_id             = module.tf-azurerm-private-endpoint[each.value.target_resource_name].nic_id

@@ -2,7 +2,7 @@
 #                   DNS Zones                                         #
 #######################################################################
 module "dns_zone" {
-  source              = "github.com/jackwesleyroper/tf-azurerm-private-dns-zone"
+  source              = "git::https://github.com/jackwesleyroper/tf-azurerm-private-dns-zone.git"
   for_each            = local.dns_zone
   name                = each.value.dns_zone_name
   resource_group_name = each.value.resource_group_name
@@ -20,7 +20,7 @@ module "dns_zone" {
 #                   DNS Zones VNET links                              #
 #######################################################################
 module "dns_zone_connectivity" {
-  source = "github.com/jackwesleyroper/tf-azurerm-private-dns-zone-virtual-network-link"
+  source = "git::https://github.com/jackwesleyroper/tf-azurerm-private-dns-zone-virtual-network-link.git"
   for_each = {
     for dns_zone_name, zone in local.dns_zone : dns_zone_name => zone
     if zone.vnet_link_enabled
