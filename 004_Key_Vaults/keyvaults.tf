@@ -14,7 +14,7 @@ data "azurerm_subnet" "snets" {
 #                            Key Vault                               #
 #######################################################################
 module "tf-azurerm-key-vault" {
-  source                          = "git::https://github.com/jackwesleyroper/tf-azurerm-key-vault.git"
+  source                          = "git::https://github.com/jackwesleyroper/tf-azurerm-key-vault.git?ref=v1.0.0"
   for_each                        = local.key_vault
   resource_group_name             = each.value.resource_group_name
   location                        = each.value.location
@@ -53,7 +53,7 @@ data "azurerm_private_dns_zone" "private_dns_zones" {
 #######################################################################
 module "tf-azurerm-private-endpoint" {
   depends_on                      = [module.tf-azurerm-key-vault]
-  source                          = "git::https://github.com/jackwesleyroper/tf-azurerm-private-endpoint.git"
+  source                          = "git::https://github.com/jackwesleyroper/tf-azurerm-private-endpoint.git?ref=v1.0.0"
   for_each                        = local.private_endpoints
   resource_group_name             = each.value.resource_group_name
   location                        = each.value.location
@@ -82,7 +82,7 @@ module "tf-azurerm-private-endpoint" {
 #######################################################################
 module "tf-azurerm-key-vault-access-policy" {
   depends_on              = [module.tf-azurerm-key-vault]
-  source                  = "git::https://github.com/jackwesleyroper/tf-azurerm-key-vault-access-policy.git"
+  source                  = "git::https://github.com/jackwesleyroper/tf-azurerm-key-vault-access-policy.git?ref=v1.0.0"
   for_each                = local.key_vault_access_policy
   tenant_id               = each.value.tenant_id
   key_vault_id            = module.tf-azurerm-key-vault[each.value.key_vault_name].key_vault_id
@@ -101,7 +101,7 @@ data "azuread_group" "azure_group" {
 
 module "tf-azurerm-key-vault-access-policy-group" {
   depends_on              = [module.tf-azurerm-key-vault]
-  source                  = "git::https://github.com/jackwesleyroper/tf-azurerm-key-vault-access-policy.git"
+  source                  = "git::https://github.com/jackwesleyroper/tf-azurerm-key-vault-access-policy.git?ref=v1.0.0"
   for_each                = local.key_vault_access_policy_groups
   tenant_id               = each.value.tenant_id
   key_vault_id            = module.tf-azurerm-key-vault[each.value.key_vault_name].key_vault_id
@@ -117,7 +117,7 @@ module "tf-azurerm-key-vault-access-policy-group" {
 #######################################################################
 module "tf-azurerm-key-vault-key" {
   depends_on      = [module.tf-azurerm-key-vault-access-policy, module.tf-azurerm-private-endpoint]
-  source          = "git::https://github.com/jackwesleyroper/tf-azurerm-key-vault-key.git"
+  source          = "git::https://github.com/jackwesleyroper/tf-azurerm-key-vault-key.git?ref=v1.0.0"
   for_each        = local.key_vault_key
   name            = each.value.name
   key_vault_id    = module.tf-azurerm-key-vault[each.value.key_vault_name].key_vault_id
@@ -139,7 +139,7 @@ module "tf-azurerm-key-vault-key" {
 #                      User Assigned Identity                         #
 #######################################################################
 module "tf-azurerm-user-assigned-identity" {
-  source                      = "git::https://github.com/jackwesleyroper/tf-azurerm-user-assigned-identity.git"
+  source                      = "git::https://github.com/jackwesleyroper/tf-azurerm-user-assigned-identity.git?ref=v1.0.0"
   for_each                    = local.user_assigned_identity
   resource_group_name         = each.value.resource_group_name
   location                    = each.value.location
@@ -167,7 +167,7 @@ data "azurerm_log_analytics_workspace" "log_analytics_workspace" {
 #######################################################################
 module "tf-azurerm-monitor-diagnostic-setting" {
   depends_on                     = [module.tf-azurerm-key-vault]
-  source                         = "git::https://github.com/jackwesleyroper/tf-azurerm-monitor-diagnostic-setting.git"
+  source                         = "git::https://github.com/jackwesleyroper/tf-azurerm-monitor-diagnostic-setting.git?ref=v1.0.0"
   for_each                       = local.diagnostic_settings
   name                           = each.value.name
   target_resource_id             = module.tf-azurerm-key-vault[each.value.target_resource_name].key_vault_id
@@ -179,7 +179,7 @@ module "tf-azurerm-monitor-diagnostic-setting" {
 
 module "tf-azurerm-monitor-diagnostic-setting-key-vault-private-endpoint" {
   depends_on                     = [module.tf-azurerm-private-endpoint]
-  source                         = "git::https://github.com/jackwesleyroper/tf-azurerm-monitor-diagnostic-setting.git"
+  source                         = "git::https://github.com/jackwesleyroper/tf-azurerm-monitor-diagnostic-setting.git?ref=v1.0.0"
   for_each                       = local.diagnostic_settings_private_endpoint
   name                           = each.value.name
   target_resource_id             = module.tf-azurerm-private-endpoint[each.value.target_resource_name].nic_id

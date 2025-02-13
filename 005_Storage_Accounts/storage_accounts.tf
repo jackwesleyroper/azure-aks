@@ -29,7 +29,7 @@ data "azurerm_user_assigned_identity" "identity" {
 #                   Storage Account                                   #
 #######################################################################
 module "storage_account" {
-  source                                    = "git::https://github.com/jackwesleyroper/tf-azurerm-storage-account.git"
+  source                                    = "git::https://github.com/jackwesleyroper/tf-azurerm-storage-account.git?ref=v1.0.0"
   for_each                                  = local.storage_accounts
   resource_group_name                       = each.value.resource_group_name
   location                                  = each.value.location
@@ -69,7 +69,7 @@ module "storage_account" {
 #                   Storage Container                                 #
 #######################################################################
 module "storage_container" {
-  source                = "git::https://github.com/jackwesleyroper/tf-azurerm-storage-container.git"
+  source                = "git::https://github.com/jackwesleyroper/tf-azurerm-storage-container.git?ref=v1.0.0"
   depends_on            = [module.storage_account, module.private_endpoint]
   for_each              = local.storage_containers
   name                  = each.value.name
@@ -100,7 +100,7 @@ data "azurerm_subnet" "pe_subnets" {
 #                   Private Endpoint                                  #
 #######################################################################
 module "private_endpoint" {
-  source                          = "git::https://github.com/jackwesleyroper/tf-azurerm-private-endpoint.git"
+  source                          = "git::https://github.com/jackwesleyroper/tf-azurerm-private-endpoint.git?ref=v1.0.0"
   depends_on                      = [module.storage_account]
   for_each                        = local.storage_accounts
   resource_group_name             = each.value.resource_group_name
@@ -135,7 +135,7 @@ data "azurerm_private_dns_zone" "file_share_private_dns_zones" {
 }
 
 module "file_share_private_endpoint" {
-  source                          = "git::https://github.com/jackwesleyroper/tf-azurerm-private-endpoint.git"
+  source                          = "git::https://github.com/jackwesleyroper/tf-azurerm-private-endpoint.git?ref=v1.0.0"
   depends_on                      = [module.storage_account]
   for_each                        = local.file_share_private_endpoints
   resource_group_name             = each.value.resource_group_name
@@ -170,7 +170,7 @@ data "azurerm_private_dns_zone" "table_private_dns_zones" {
 }
 
 module "table_private_endpoint" {
-  source                          = "git::https://github.com/jackwesleyroper/tf-azurerm-private-endpoint.git"
+  source                          = "git::https://github.com/jackwesleyroper/tf-azurerm-private-endpoint.git?ref=v1.0.0"
   depends_on                      = [module.storage_account]
   for_each                        = local.table_private_endpoints
   resource_group_name             = each.value.resource_group_name
@@ -205,7 +205,7 @@ data "azurerm_private_dns_zone" "queue_private_dns_zones" {
 }
 
 module "queue_private_endpoint" {
-  source                          = "git::https://github.com/jackwesleyroper/tf-azurerm-private-endpoint.git"
+  source                          = "git::https://github.com/jackwesleyroper/tf-azurerm-private-endpoint.git?ref=v1.0.0"
   depends_on                      = [module.storage_account]
   for_each                        = local.queue_private_endpoints
   resource_group_name             = each.value.resource_group_name
@@ -243,7 +243,7 @@ data "azurerm_log_analytics_workspace" "log_analytics_workspace" {
 #######################################################################
 module "tf-azurerm-monitor-diagnostic-setting" {
   depends_on = [module.storage_account]
-  source     = "git::https://github.com/jackwesleyroper/tf-azurerm-monitor-diagnostic-setting.git"
+  source     = "git::https://github.com/jackwesleyroper/tf-azurerm-monitor-diagnostic-setting.git?ref=v1.0.0"
   for_each   = local.diagnostic_settings
 
   name                           = each.value.name
@@ -256,7 +256,7 @@ module "tf-azurerm-monitor-diagnostic-setting" {
 
 module "tf-azurerm-monitor-diagnostic-setting-storage-blob" {
   depends_on = [module.storage_account, module.storage_container]
-  source     = "git::https://github.com/jackwesleyroper/tf-azurerm-monitor-diagnostic-setting.git"
+  source     = "git::https://github.com/jackwesleyroper/tf-azurerm-monitor-diagnostic-setting.git?ref=v1.0.0"
   for_each   = local.diagnostic_settings_storage_blob
 
   name                           = each.value.name
@@ -269,7 +269,7 @@ module "tf-azurerm-monitor-diagnostic-setting-storage-blob" {
 
 module "tf-azurerm-monitor-diagnostic-setting-storage-file" {
   depends_on = [module.storage_account, module.storage_container]
-  source     = "git::https://github.com/jackwesleyroper/tf-azurerm-monitor-diagnostic-setting.git"
+  source     = "git::https://github.com/jackwesleyroper/tf-azurerm-monitor-diagnostic-setting.git?ref=v1.0.0"
   for_each   = local.diagnostic_settings_storage_file
 
   name                           = each.value.name
@@ -282,7 +282,7 @@ module "tf-azurerm-monitor-diagnostic-setting-storage-file" {
 
 module "tf-azurerm-monitor-diagnostic-setting-storage-table" {
   depends_on = [module.storage_account, module.storage_container]
-  source     = "git::https://github.com/jackwesleyroper/tf-azurerm-monitor-diagnostic-setting.git"
+  source     = "git::https://github.com/jackwesleyroper/tf-azurerm-monitor-diagnostic-setting.git?ref=v1.0.0"
   for_each   = local.diagnostic_settings_storage_table
 
   name                           = each.value.name
@@ -295,7 +295,7 @@ module "tf-azurerm-monitor-diagnostic-setting-storage-table" {
 
 module "tf-azurerm-monitor-diagnostic-setting-storage-queue" {
   depends_on = [module.storage_account, module.storage_container]
-  source     = "git::https://github.com/jackwesleyroper/tf-azurerm-monitor-diagnostic-setting.git"
+  source     = "git::https://github.com/jackwesleyroper/tf-azurerm-monitor-diagnostic-setting.git?ref=v1.0.0"
   for_each   = local.diagnostic_settings_storage_queue
 
   name                           = each.value.name

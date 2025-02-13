@@ -1,5 +1,4 @@
 # azure-aks
-WIP
 
 Creates an Azure Kubernetes service and supporting infrastructure using GitHub Actions CICD.
 
@@ -27,7 +26,8 @@ The project contains the folowing resources:
 * User Assigned Identities
 * Storage Account
 * Monitor Diagnostic Settings
-* Azure Kubernetes Service (Free Tier)
+* Network Flow Logs
+* Azure Kubernetes Service
 * Azure Container Registry
 
 ## List of referenced modules
@@ -60,8 +60,6 @@ All modules used can be found under my jackwesleyroper GitHub account.
 
 ## Build notes / to do
 
-* Add module version constraints after first successful build
 * Restict KV access to Github actions listed here: https://api.github.com/meta (currently set to allow public access and default action is allow)
 * Add rationale for each stage for resources used and settings
 * Is Premium KV needed?
-* 

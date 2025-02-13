@@ -38,7 +38,7 @@ data "azurerm_virtual_network" "vnets" {
 #                     Network Watcher Flow Logs                       #
 #######################################################################
 module "tf-azurerm-network-watcher-flow-log" {
-  source                                = "git::https://github.com/jackwesleyroper/tf-azurerm-network-watcher-flow-log.git"
+  source                                = "git::https://github.com/jackwesleyroper/tf-azurerm-network-watcher-flow-log.git?ref=v1.0.0"
   for_each                              = local.network_watcher_flow_logs
   name                                  = each.value.name
   network_watcher_name                  = each.value.network_watcher_name
@@ -67,7 +67,7 @@ module "tf-azurerm-network-watcher-flow-log" {
 #                  Monitor Diagnostic Settings Vnet                   #
 #######################################################################
 module "tf-azurerm-monitor-diagnostic-setting-vnet" {
-  source                         = "git::https://github.com/jackwesleyroper/tf-azurerm-monitor-diagnostic-setting.git"
+  source                         = "git::https://github.com/jackwesleyroper/tf-azurerm-monitor-diagnostic-setting.git?ref=v1.0.0"
   for_each                       = local.diagnostic_settings_vnet
   name                           = each.value.name
   target_resource_id             = data.azurerm_virtual_network.vnets[each.value.target_resource_name].id
@@ -81,7 +81,7 @@ module "tf-azurerm-monitor-diagnostic-setting-vnet" {
 #                  Monitor Diagnostic Settings NSG                    #
 #######################################################################
 module "tf-azurerm-monitor-diagnostic-setting-nsg" {
-  source                         = "git::https://github.com/jackwesleyroper/tf-azurerm-monitor-diagnostic-setting.git"
+  source                         = "git::https://github.com/jackwesleyroper/tf-azurerm-monitor-diagnostic-setting.git?ref=v1.0.0"
   for_each                       = local.diagnostic_settings_nsg
   name                           = each.value.name
   target_resource_id             = data.azurerm_network_security_group.nsgs[each.value.target_resource_name].id

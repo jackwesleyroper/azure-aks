@@ -2,7 +2,7 @@
 #                        Virtual Network                              #
 #######################################################################
 module "tf-azurerm-vnet" {
-  source              = "git::https://github.com/jackwesleyroper/tf-azurerm-vnet.git"
+  source              = "git::https://github.com/jackwesleyroper/tf-azurerm-vnet.git?ref=v1.0.0"
   for_each            = local.vnet
   resource_group_name = each.value.resource_group_name
   location            = each.value.location
@@ -25,7 +25,7 @@ module "tf-azurerm-vnet" {
 #######################################################################
 module "tf-azurerm-subnet" {
   depends_on                                    = [module.tf-azurerm-vnet]
-  source                                        = "git::https://github.com/jackwesleyroper/tf-azurerm-subnet.git"
+  source                                        = "git::https://github.com/jackwesleyroper/tf-azurerm-subnet.git?ref=v1.0.0"
   for_each                                      = local.subnet
   resource_group_name                           = each.value.resource_group_name
   vnet_name                                     = each.value.vnet_name
@@ -42,7 +42,7 @@ module "tf-azurerm-subnet" {
 #######################################################################
 module "tf-azurerm-network-security-group" {
   depends_on          = [module.tf-azurerm-subnet]
-  source              = "git::https://github.com/jackwesleyroper/tf-azurerm-network-security-group.git"
+  source              = "git::https://github.com/jackwesleyroper/tf-azurerm-network-security-group.git?ref=v1.0.0"
   for_each            = local.nsg
   resource_group_name = each.value.resource_group_name
   location            = each.value.location
@@ -64,7 +64,7 @@ module "tf-azurerm-network-security-group" {
 #######################################################################
 module "tf-azurerm-route-table" {
   depends_on                    = [module.tf-azurerm-subnet]
-  source                        = "git::https://github.com/jackwesleyroper/tf-azurerm-route-table.git"
+  source                        = "git::https://github.com/jackwesleyroper/tf-azurerm-route-table.git?ref=v1.0.0"
   for_each                      = local.route_table
   resource_group_name           = each.value.resource_group_name
   location                      = each.value.location
