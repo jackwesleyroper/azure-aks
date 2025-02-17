@@ -115,8 +115,8 @@ locals {
       default_node_pool_os_sku                     = "Ubuntu"
       default_node_pool_scale_down_mode            = "Delete"
       default_node_pool_max_count                  = try(var.config.containers_aks_max_node_count, var.containers_aks_max_node_count)
-      default_node_pool_min_count                  = 3
-      default_node_pool_node_count                 = 3
+      default_node_pool_min_count                  = 2
+      default_node_pool_node_count                 = 2
       default_node_pool_orchestrator_version       = var.config.default_node_pool_orchestrator_version
       default_node_pool_upgrade_settings_max_surge = "3"
       kubelet_identity                             = true
