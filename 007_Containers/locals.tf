@@ -75,7 +75,7 @@ locals {
       location                                     = var.config.location_longname
       resource_group_name                          = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-rg-001"
       dns_prefix_private_cluster                   = "${var.config.environment_longname}${var.config.regulation_shortname}aks${var.config.location_shortname}aks001"
-      public_network_access_enabled                = false
+      public_network_access_enabled                = true # change to false when build agents in place
       private_dns_zone_id                          = "System"
       automatic_upgrade_channel                    = "patch"
       azure_policy_enabled                         = true
@@ -83,12 +83,12 @@ locals {
       sku_tier                                     = "Free"
       identity_type                                = "UserAssigned"
       identity_name                                = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-001-id-001"
-      private_cluster_enabled                      = true
+      private_cluster_enabled                      = false # change to true when build agents in place
       default_node_pool_name                       = "agentpool"
       default_node_pool_vm_size                    = "Standard_B1ms"
       default_node_pool_type                       = "VirtualMachineScaleSets"
       default_node_pool_auto_scaling_enabled       = true
-      default_node_pool_node_public_ip_enabled     = false
+      default_node_pool_node_public_ip_enabled     = true # change to false when build agents in place
       default_node_pool_max_pods                   = 20
       default_node_pool_os_disk_size_gb            = 128
       default_node_pool_os_disk_type               = "Managed"
@@ -106,7 +106,7 @@ locals {
       user_assigned_identity_id                    = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-001-id-001"
 
       api_server_access_profile = {
-        authorized_ip_ranges            = null
+        authorized_ip_ranges            = ["82.42.167.128"]        
         subnet_name                     = "${var.config.environment_longname}-aks-snet-002"
         subnet_vnet_name                = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-vnet-001"
         vnet_subnet_resource_group_name = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-network-rg-001"
