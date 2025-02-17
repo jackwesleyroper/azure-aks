@@ -106,7 +106,7 @@ locals {
       user_assigned_identity_id                    = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-001-id-001"
 
       api_server_access_profile = {
-        authorized_ip_ranges            = ["82.42.167.128"]        
+        authorized_ip_ranges            = ["82.42.167.128"]
         subnet_name                     = "${var.config.environment_longname}-aks-snet-002"
         subnet_vnet_name                = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-vnet-001"
         vnet_subnet_resource_group_name = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-network-rg-001"
