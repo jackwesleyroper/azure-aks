@@ -116,31 +116,29 @@ module "tf-azurerm-private-endpoint" {
   }
 }
 
-#######################################################################
-#                        Public IP                                    #
-#######################################################################
+# #######################################################################
+# #                        Public IP                                    #
+# #######################################################################
 
-# Not required if creating a private cluster
+# module "tf-azurerm-public-ip" {
+#   source              = "git::https://github.com/jackwesleyroper/tf-azurerm-public-ip?ref=v1.0.0"
+#   for_each            = local.aks_public_ip
+#   name                = each.value.name
+#   resource_group_name = each.value.resource_group_name
+#   location            = each.value.location
+#   allocation_method   = each.value.allocation_method
+#   zones               = each.value.zones
+#   sku                 = each.value.sku
+#   domain_name_label   = each.value.domain_name_label
 
-module "tf-azurerm-public-ip" {
-  source              = "git::https://github.com/jackwesleyroper/tf-azurerm-public-ip?ref=v1.0.0"
-  for_each            = local.aks_public_ip
-  name                = each.value.name
-  resource_group_name = each.value.resource_group_name
-  location            = each.value.location
-  allocation_method   = each.value.allocation_method
-  zones               = each.value.zones
-  sku                 = each.value.sku
-  domain_name_label   = each.value.domain_name_label
-
-  tags = {
-    Name               = each.value.name
-    "Environment Type" = var.config.environment_longname
-    Service            = "AKS"
-    Owner              = "Jack Roper"
-    "Resource Purpose" = "Public IP Address"
-  }
-}
+#   tags = {
+#     Name               = each.value.name
+#     "Environment Type" = var.config.environment_longname
+#     Service            = "AKS"
+#     Owner              = "Jack Roper"
+#     "Resource Purpose" = "Public IP Address"
+#   }
+# }
 
 #######################################################################
 #                        Private key                                  #
@@ -243,7 +241,7 @@ module "tf-azurerm-kubernetes-cluster" {
   default_node_pool_type                       = each.value.default_node_pool_type
   default_node_pool_auto_scaling_enabled       = each.value.default_node_pool_auto_scaling_enabled
   default_node_pool_node_public_ip_enabled     = each.value.default_node_pool_node_public_ip_enabled
-  default_node_pool_node_public_ip_prefix_id   = module.tf-azurerm-public-ip[each.value.pip_name].id # not needed if private cluster
+  default_node_pool_node_public_ip_prefix_id   = null # not needed if private cluster
   default_node_pool_max_pods                   = each.value.default_node_pool_max_pods
   default_node_pool_os_disk_size_gb            = each.value.default_node_pool_os_disk_size_gb
   default_node_pool_os_disk_type               = each.value.default_node_pool_os_disk_type
@@ -413,14 +411,14 @@ module "tf-azurerm-monitor-diagnostic-setting-acr-private-endpoint" {
   metrics                        = each.value.metrics
 }
 
-module "tf-azurerm-monitor-diagnostic-setting-pip" {
-  depends_on                     = [module.tf-azurerm-public-ip]
-  source                         = "git::https://github.com/jackwesleyroper/tf-azurerm-monitor-diagnostic-setting.git?ref=v1.0.0"
-  for_each                       = local.aks_public_ip
-  name                           = local.diagnostic_settings_pip.name
-  target_resource_id             = module.tf-azurerm-public-ip[each.key].id
-  log_analytics_workspace_id     = data.azurerm_log_analytics_workspace.log_analytics_workspace.id
-  log_analytics_destination_type = local.diagnostic_settings_pip.log_analytics_destination_type
-  logs_category                  = local.diagnostic_settings_pip.logs_category
-  metrics                        = local.diagnostic_settings_pip.metrics
-}
+# module "tf-azurerm-monitor-diagnostic-setting-pip" {
+#   depends_on                     = [module.tf-azurerm-public-ip]
+#   source                         = "git::https://github.com/jackwesleyroper/tf-azurerm-monitor-diagnostic-setting.git?ref=v1.0.0"
+#   for_each                       = local.aks_public_ip
+#   name                           = local.diagnostic_settings_pip.name
+#   target_resource_id             = module.tf-azurerm-public-ip[each.key].id
+#   log_analytics_workspace_id     = data.azurerm_log_analytics_workspace.log_analytics_workspace.id
+#   log_analytics_destination_type = local.diagnostic_settings_pip.log_analytics_destination_type
+#   logs_category                  = local.diagnostic_settings_pip.logs_category
+#   metrics                        = local.diagnostic_settings_pip.metrics
+# }

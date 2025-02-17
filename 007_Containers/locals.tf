@@ -66,20 +66,20 @@ locals {
     resource_group_name = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-network-rg-001"
   }
 
-  #######################################################################
-  #                   Public IP                                        #
-  #######################################################################
-  aks_public_ip = {
-    "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-pip-001" = {
-      name                = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-pip-001"
-      resource_group_name = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-rg-001"
-      location            = var.config.location_longname
-      allocation_method   = "Static"
-      zones               = [1, 2, 3]
-      sku                 = "Standard"
-      domain_name_label   = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-pip-001"
-    }
-  }
+  # #######################################################################
+  # #                   Public IP                                        #
+  # #######################################################################
+  # aks_public_ip = {
+  #   "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-pip-001" = {
+  #     name                = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-pip-001"
+  #     resource_group_name = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-rg-001"
+  #     location            = var.config.location_longname
+  #     allocation_method   = "Static"
+  #     zones               = [1, 2, 3]
+  #     sku                 = "Standard"
+  #     domain_name_label   = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-pip-001"
+  #   }
+  # }
 
 
   #######################################################################
@@ -107,7 +107,7 @@ locals {
       default_node_pool_vm_size                    = "Standard_B2s" # System node pool must use VM sku with more than 2 cores and 4GB memory.
       default_node_pool_type                       = "VirtualMachineScaleSets"
       default_node_pool_auto_scaling_enabled       = true
-      default_node_pool_node_public_ip_enabled     = true # change to false when build agents in place
+      default_node_pool_node_public_ip_enabled     = false
       default_node_pool_max_pods                   = 20
       default_node_pool_os_disk_size_gb            = 128
       default_node_pool_os_disk_type               = "Managed"
