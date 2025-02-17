@@ -123,6 +123,7 @@ locals {
       client_id                                    = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-001-id-001"
       object_id                                    = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-001-id-001"
       user_assigned_identity_id                    = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-001-id-001"
+      pip_name                                     = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-pip-001"
 
       api_server_access_profile = {
         authorized_ip_ranges            = ["82.42.167.128"] # change to null for a private cluster

@@ -243,7 +243,7 @@ module "tf-azurerm-kubernetes-cluster" {
   default_node_pool_type                       = each.value.default_node_pool_type
   default_node_pool_auto_scaling_enabled       = each.value.default_node_pool_auto_scaling_enabled
   default_node_pool_node_public_ip_enabled     = each.value.default_node_pool_node_public_ip_enabled
-  default_node_pool_node_public_ip_prefix_id   = module.tf-azurerm-public-ip[each.value.name].id # not needed if private cluster
+  default_node_pool_node_public_ip_prefix_id   = module.tf-azurerm-public-ip[each.value.pip_name].id # not needed if private cluster
   default_node_pool_max_pods                   = each.value.default_node_pool_max_pods
   default_node_pool_os_disk_size_gb            = each.value.default_node_pool_os_disk_size_gb
   default_node_pool_os_disk_type               = each.value.default_node_pool_os_disk_type

@@ -27,7 +27,7 @@
 # For more samples to get started with GitHub Action workflows to deploy to Azure, refer to https://github.com/Azure/actions-workflow-samples
 # For more options with the actions used below please refer to https://github.com/Azure/login
 
-name: Build and deploy an app to AKS
+name: Build and deploy Azure Vote app to AKS
 
 on:
   push:
@@ -35,19 +35,25 @@ on:
       - main
     paths:
       - 'manifests/**'
+      - 'azure-vote/**'
   pull_request:
     branches:
       - main
     paths:
       - 'manifests/**'
+      - 'azure-vote/**'
   workflow_dispatch:
 
 env:
   AZURE_CONTAINER_REGISTRY: "devnpaksuksacr001"
-  CONTAINER_NAME: "nginx"
+  CONTAINER_NAME: "azurevote"
   RESOURCE_GROUP: "dev-nonprod-aks-uks-core-rg-001"
   CLUSTER_NAME: "dev-nonprod-aks-uks-aks-001"
-  DEPLOYMENT_MANIFEST_PATH: "manifests/nginx.yaml"
+  DEPLOYMENT_MANIFEST_PATH: |
+      ./manifests/azure-vote-backend-deployment.yaml
+      ./manifests/azure-vote-backend-service.yaml
+      ./manifests/azure-vote-frontend-deployment.yaml
+      ./manifests/azure-vote-frontend-service.yaml
 
 jobs:
   buildImage:
@@ -70,7 +76,7 @@ jobs:
       # Builds and pushes an image up to your Azure Container Registry
       - name: Build and push image to ACR
         run: |
-          az acr build --image ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_NAME }}:${{ github.sha }} --registry ${{ env.AZURE_CONTAINER_REGISTRY }} -g ${{ env.RESOURCE_GROUP }} .
+          az acr build --image ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_NAME }}:${{ github.sha }} --registry ${{ env.AZURE_CONTAINER_REGISTRY }} -g ${{ env.RESOURCE_GROUP }} -f ./azure-vote/Dockerfile ./
 
   deploy:
     permissions:
