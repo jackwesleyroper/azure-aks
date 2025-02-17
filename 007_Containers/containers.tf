@@ -196,7 +196,7 @@ module "tf-azurerm-kubernetes-cluster" {
   dns_prefix              = each.value.dns_prefix
   #dns_prefix_private_cluster    = each.value.dns_prefix_private_cluster # add for private cluster
   public_network_access_enabled = each.value.public_network_access_enabled
-  private_dns_zone_id           = data.azurerm_private_dns_zone.private_dns_zone_aks.id
+  private_dns_zone_id           = null #data.azurerm_private_dns_zone.private_dns_zone_aks.id
   automatic_upgrade_channel     = each.value.automatic_upgrade_channel
   azure_policy_enabled          = each.value.azure_policy_enabled
   kubernetes_version            = each.value.kubernetes_version

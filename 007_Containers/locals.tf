@@ -69,15 +69,17 @@ locals {
   #######################################################################
   #                   Kubernetes cluster                                #
   #######################################################################
+
+  # Commented items should be changed to enable a private cluster rather than a public one.
   kubernetes_cluster = {
     "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-001" = {
-      name                = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-001"
-      location            = var.config.location_longname
-      resource_group_name = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-rg-001"
-      dns_prefix          = "${var.config.environment_longname}${var.config.regulation_shortname}aks${var.config.location_shortname}aks001" # remove when setting up private cluster
-      #dns_prefix_private_cluster                   = "${var.config.environment_longname}${var.config.regulation_shortname}aks${var.config.location_shortname}aks001"
+      name                                         = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-001"
+      location                                     = var.config.location_longname
+      resource_group_name                          = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-rg-001"
+      dns_prefix                                   = "${var.config.environment_longname}${var.config.regulation_shortname}aks${var.config.location_shortname}aks001" # change to null and enable private cluster option when setting up private cluster
+      dns_prefix_private_cluster                   = null #"${var.config.environment_longname}${var.config.regulation_shortname}aks${var.config.location_shortname}aks001"
       public_network_access_enabled                = true # change to false when build agents in place
-      private_dns_zone_id                          = "System"
+      private_dns_zone_id                          = null # "System"
       automatic_upgrade_channel                    = "patch"
       azure_policy_enabled                         = true
       kubernetes_version                           = var.config.kubernetes_version
@@ -107,7 +109,7 @@ locals {
       user_assigned_identity_id                    = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-001-id-001"
 
       api_server_access_profile = {
-        authorized_ip_ranges            = ["82.42.167.128"]
+        authorized_ip_ranges            = ["82.42.167.128"] # change to null for a private cluster
         subnet_name                     = "${var.config.environment_longname}-aks-snet-002"
         subnet_vnet_name                = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-vnet-001"
         vnet_subnet_resource_group_name = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-network-rg-001"
