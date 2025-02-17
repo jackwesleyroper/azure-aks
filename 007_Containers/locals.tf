@@ -77,9 +77,9 @@ locals {
       location                                     = var.config.location_longname
       resource_group_name                          = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-rg-001"
       dns_prefix                                   = "${var.config.environment_longname}${var.config.regulation_shortname}aks${var.config.location_shortname}aks001" # change to null and enable private cluster option when setting up private cluster
-      dns_prefix_private_cluster                   = null #"${var.config.environment_longname}${var.config.regulation_shortname}aks${var.config.location_shortname}aks001"
-      public_network_access_enabled                = true # change to false when build agents in place
-      private_dns_zone_id                          = null # "System"
+      dns_prefix_private_cluster                   = null                                                                                                            #"${var.config.environment_longname}${var.config.regulation_shortname}aks${var.config.location_shortname}aks001"
+      public_network_access_enabled                = true                                                                                                            # change to false when build agents in place
+      private_dns_zone_id                          = null                                                                                                            # "System"
       automatic_upgrade_channel                    = "patch"
       azure_policy_enabled                         = true
       kubernetes_version                           = var.config.kubernetes_version
