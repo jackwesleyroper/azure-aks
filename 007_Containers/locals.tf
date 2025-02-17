@@ -85,7 +85,7 @@ locals {
       identity_name                                = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-001-id-001"
       private_cluster_enabled                      = true
       default_node_pool_name                       = "agentpool"
-      default_node_pool_vm_size                    = "Standard_B4ms"
+      default_node_pool_vm_size                    = "Standard_B1ms"
       default_node_pool_type                       = "VirtualMachineScaleSets"
       default_node_pool_auto_scaling_enabled       = true
       default_node_pool_node_public_ip_enabled     = false

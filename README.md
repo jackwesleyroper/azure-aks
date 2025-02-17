@@ -56,7 +56,23 @@ All modules used can be found under my jackwesleyroper GitHub account.
    2. `AZURE_SUBSCRIPTION_ID`
    3. `AZURE_TENANT_ID`
    4. `TF_STATE_STORAGE_ACCOUNT` (containing storage account name that will hold Terraform State files from step 3)
-12. Push the code using the manual workflow dispatch trigger under the actions tab in order, e.g. 001, 002, 003 etc. until all runs have completed. If you change the code in a particular section, the workflows are set to automatically push on updates (CI/CD).
+12. Push the code using the manual workflow dispatch trigger under the actions tab in order, e.g. 001, 002, 003 etc. until all runs have completed. If you change the code in a particular section, the workflows are set to automatically push on updates (CI/CD). Lastly run the Deploy Manifest pipeline to deploy the container to the cluster.
+
+## Testing
+
+To connect to your Nginx instance deployed on Azure Kubernetes Service (AKS) and check if it's working, you can follow these steps:
+
+Get the External IP Address: After deploying the Nginx instance, you need to get the external IP address of the service. You can do this by running the following command:
+
+`kubectl get services nginx-service`
+Look for the EXTERNAL-IP column in the output. It might take a few minutes for the external IP to be assigned.
+
+Access the Nginx Instance: Once you have the external IP address, you can open a web browser and navigate to `http://<EXTERNAL-IP>`. You should see the default Nginx welcome page if everything is working correctly.
+
+Verify the Deployment: You can also verify the deployment by checking the pods' status. Run the following command to see the status of the pods:
+
+`kubectl get pods`
+Ensure that the Nginx pod is in the Running state.
 
 ## Build notes / to do
 
