@@ -71,10 +71,11 @@ locals {
   #######################################################################
   kubernetes_cluster = {
     "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-001" = {
-      name                                         = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-001"
-      location                                     = var.config.location_longname
-      resource_group_name                          = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-rg-001"
-      dns_prefix_private_cluster                   = "${var.config.environment_longname}${var.config.regulation_shortname}aks${var.config.location_shortname}aks001"
+      name                = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-001"
+      location            = var.config.location_longname
+      resource_group_name = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-rg-001"
+      dns_prefix          = "${var.config.environment_longname}${var.config.regulation_shortname}aks${var.config.location_shortname}aks001" # remove when setting up private cluster
+      #dns_prefix_private_cluster                   = "${var.config.environment_longname}${var.config.regulation_shortname}aks${var.config.location_shortname}aks001"
       public_network_access_enabled                = true # change to false when build agents in place
       private_dns_zone_id                          = "System"
       automatic_upgrade_channel                    = "patch"

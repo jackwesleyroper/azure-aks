@@ -193,6 +193,7 @@ module "tf-azurerm-kubernetes-cluster" {
   resource_group_name           = each.value.resource_group_name
   location                      = each.value.location
   kubernetes_cluster_name       = each.value.name
+  dns_prefix                    = each.value.dns_prefix
   dns_prefix_private_cluster    = each.value.dns_prefix_private_cluster
   public_network_access_enabled = each.value.public_network_access_enabled
   private_dns_zone_id           = data.azurerm_private_dns_zone.private_dns_zone_aks.id
