@@ -86,7 +86,7 @@ locals {
       identity_name                                = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-001-id-001"
       private_cluster_enabled                      = false # change to true when build agents in place
       default_node_pool_name                       = "agentpool"
-      default_node_pool_vm_size                    = "Standard_B1ms"
+      default_node_pool_vm_size                    = "Standard_B2s" # System node pool must use VM sku with more than 2 cores and 4GB memory.
       default_node_pool_type                       = "VirtualMachineScaleSets"
       default_node_pool_auto_scaling_enabled       = true
       default_node_pool_node_public_ip_enabled     = true # change to false when build agents in place
