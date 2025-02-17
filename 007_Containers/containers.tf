@@ -117,6 +117,32 @@ module "tf-azurerm-private-endpoint" {
 }
 
 #######################################################################
+#                        Public IP                                    #
+#######################################################################
+
+# Not required if creating a private cluster
+
+module "tf-azurerm-public-ip" {
+  source              = "git::https://github.com/jackwesleyroper/tf-azurerm-public-ip?ref=v1.0.0"
+  for_each            = local.aks_public_ip
+  name                = each.value.name
+  resource_group_name = each.value.resource_group_name
+  location            = each.value.location
+  allocation_method   = each.value.allocation_method
+  zones               = each.value.zones
+  sku                 = each.value.sku
+  domain_name_label   = each.value.domain_name_label
+
+  tags = {
+    Name               = each.value.name
+    "Environment Type" = var.config.environment_longname
+    Service            = "AKS"
+    Owner              = "Jack Roper"
+    "Resource Purpose" = "Public IP Address"
+  }
+}
+
+#######################################################################
 #                        Private key                                  #
 #######################################################################
 resource "tls_private_key" "private_key" {
@@ -194,7 +220,7 @@ module "tf-azurerm-kubernetes-cluster" {
   location                = each.value.location
   kubernetes_cluster_name = each.value.name
   dns_prefix              = each.value.dns_prefix
-  #dns_prefix_private_cluster    = each.value.dns_prefix_private_cluster # add for private cluster
+  dns_prefix_private_cluster    = each.value.dns_prefix_private_cluster
   public_network_access_enabled = each.value.public_network_access_enabled
   private_dns_zone_id           = null #data.azurerm_private_dns_zone.private_dns_zone_aks.id
   automatic_upgrade_channel     = each.value.automatic_upgrade_channel
@@ -217,6 +243,7 @@ module "tf-azurerm-kubernetes-cluster" {
   default_node_pool_type                       = each.value.default_node_pool_type
   default_node_pool_auto_scaling_enabled       = each.value.default_node_pool_auto_scaling_enabled
   default_node_pool_node_public_ip_enabled     = each.value.default_node_pool_node_public_ip_enabled
+  default_node_pool_node_public_ip_prefix_id   = module.tf-azurerm-public-ip[each.value.public_ip_address_id].id # not needed if private cluster
   default_node_pool_max_pods                   = each.value.default_node_pool_max_pods
   default_node_pool_os_disk_size_gb            = each.value.default_node_pool_os_disk_size_gb
   default_node_pool_os_disk_type               = each.value.default_node_pool_os_disk_type
@@ -384,4 +411,16 @@ module "tf-azurerm-monitor-diagnostic-setting-acr-private-endpoint" {
   log_analytics_destination_type = each.value.log_analytics_destination_type
   logs_category                  = each.value.logs_category
   metrics                        = each.value.metrics
+}
+
+module "tf-azurerm-monitor-diagnostic-setting-pip" {
+  depends_on = [module.tf-azurerm-public-ip]
+  source     = "git::https://github.com/jackwesleyroper/tf-azurerm-monitor-diagnostic-setting.git?ref=v1.0.0"
+  for_each   = local.aks_public_ip
+  name                           = local.diagnostic_settings_pip.name
+  target_resource_id             = module.tf-azurerm-public-ip[each.key].id
+  log_analytics_workspace_id     = data.azurerm_log_analytics_workspace.log_analytics_workspace.id
+  log_analytics_destination_type = local.diagnostic_settings_pip.log_analytics_destination_type
+  logs_category                  = local.diagnostic_settings_pip.logs_category
+  metrics                        = local.diagnostic_settings_pip.metrics
 }

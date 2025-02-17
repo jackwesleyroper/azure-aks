@@ -67,6 +67,22 @@ locals {
   }
 
   #######################################################################
+  #                   Public IP                                        #
+  #######################################################################
+  aks_public_ip = {
+    "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-pip-001" = {
+      name                = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-pip-001"
+      resource_group_name = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-rg-001"
+      location            = var.config.location_longname
+      allocation_method   = "Static"
+      zones               = [1, 2, 3]
+      sku                 = "Standard"
+      domain_name_label   = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-pip-001"
+    }
+  }
+
+
+  #######################################################################
   #                   Kubernetes cluster                                #
   #######################################################################
 
@@ -468,4 +484,30 @@ locals {
       }
     },
   }
+
+  diagnostic_settings_pip = {
+    name                           = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-law-001"
+    log_analytics_destination_type = null
+    logs_category = {
+      "DDoSProtectionNotifications" = {
+        category = "DDoSProtectionNotifications"
+        enabled  = true
+      },
+      "DDoSMitigationFlowLogs" = {
+        category = "DDoSMitigationFlowLogs"
+        enabled  = true
+      },
+      "DDoSMitigationReports" = {
+        category = "DDoSMitigationReports"
+        enabled  = true
+      }
+    }
+    metrics = {
+      "AllMetrics" = {
+        category = "AllMetrics"
+        enabled  = true
+      }
+    }
+  }
+
 }
