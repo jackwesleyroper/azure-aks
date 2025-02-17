@@ -213,13 +213,13 @@ module "role_assignment_aks" {
 }
 
 module "tf-azurerm-kubernetes-cluster" {
-  source                  = "git::https://github.com/jackwesleyroper/tf-azurerm-azure-kubernetes-cluster.git?ref=v1.0.0"
-  depends_on              = [module.role_assignment_aks, module.tf-azurerm-role-assignment-aks-vnet, tls_private_key.private_key]
-  for_each                = local.kubernetes_cluster
-  resource_group_name     = each.value.resource_group_name
-  location                = each.value.location
-  kubernetes_cluster_name = each.value.name
-  dns_prefix              = each.value.dns_prefix
+  source                        = "git::https://github.com/jackwesleyroper/tf-azurerm-azure-kubernetes-cluster.git?ref=v1.0.0"
+  depends_on                    = [module.role_assignment_aks, module.tf-azurerm-role-assignment-aks-vnet, tls_private_key.private_key]
+  for_each                      = local.kubernetes_cluster
+  resource_group_name           = each.value.resource_group_name
+  location                      = each.value.location
+  kubernetes_cluster_name       = each.value.name
+  dns_prefix                    = each.value.dns_prefix
   dns_prefix_private_cluster    = each.value.dns_prefix_private_cluster
   public_network_access_enabled = each.value.public_network_access_enabled
   private_dns_zone_id           = null #data.azurerm_private_dns_zone.private_dns_zone_aks.id
@@ -414,9 +414,9 @@ module "tf-azurerm-monitor-diagnostic-setting-acr-private-endpoint" {
 }
 
 module "tf-azurerm-monitor-diagnostic-setting-pip" {
-  depends_on = [module.tf-azurerm-public-ip]
-  source     = "git::https://github.com/jackwesleyroper/tf-azurerm-monitor-diagnostic-setting.git?ref=v1.0.0"
-  for_each   = local.aks_public_ip
+  depends_on                     = [module.tf-azurerm-public-ip]
+  source                         = "git::https://github.com/jackwesleyroper/tf-azurerm-monitor-diagnostic-setting.git?ref=v1.0.0"
+  for_each                       = local.aks_public_ip
   name                           = local.diagnostic_settings_pip.name
   target_resource_id             = module.tf-azurerm-public-ip[each.key].id
   log_analytics_workspace_id     = data.azurerm_log_analytics_workspace.log_analytics_workspace.id
