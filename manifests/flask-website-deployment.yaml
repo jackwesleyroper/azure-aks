@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-website-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-website
+  template:
+    metadata:
+      labels:
+        app: flask-website
+    spec:
+      containers:
+      - name: flask-website
+        image: devnpaksuksacr001.azurecr.io/flask-website:latest
+        ports:
+        - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-website-service
+spec:
+  selector:
+    app: flask-website
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 5000
+  type: LoadBalancer
