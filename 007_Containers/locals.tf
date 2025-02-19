@@ -244,18 +244,6 @@ locals {
       service_principal_name           = "aks-${var.config.regulation_longname}-${var.config.environment_longname}"
       skip_service_principal_aad_check = true
     },
-    "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-001-rbac-cluster-admin-GitHub" = {
-      scope_name                       = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-001"
-      role_definition_name             = "Azure Kubernetes Service RBAC Cluster Admin"
-      service_principal_name           = "GitHub"
-      skip_service_principal_aad_check = true
-    },
-    "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-001-cluster-admin-role-GitHub" = {
-      scope_name                       = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-001"
-      role_definition_name             = "Azure Kubernetes Service Cluster Admin Role"
-      service_principal_name           = "GitHub"
-      skip_service_principal_aad_check = true
-    },
   }
 
   #######################################################################
