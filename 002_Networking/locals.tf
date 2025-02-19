@@ -172,7 +172,7 @@ locals {
           access                       = "Allow"
           protocol                     = "Tcp"
           source_port_ranges           = ["*"]
-          destination_port_ranges      = ["80, 8080"]
+          destination_port_ranges      = ["80", "8080"]
           source_address_prefixes      = ["82.42.167.128"]
           destination_address_prefixes = [var.config.aks1_cidr]
           description                  = "Allow external to aks"
