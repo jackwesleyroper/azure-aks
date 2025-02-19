@@ -126,7 +126,7 @@ locals {
       pip_name                                     = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-pip-001"
 
       api_server_access_profile = {
-        authorized_ip_ranges            = ["82.42.167.128"] # change to null for a private cluster
+        authorized_ip_ranges            = null # ["82.42.167.128"] # change to null for a private cluster or add local address and build agent here
         subnet_name                     = "${var.config.environment_longname}-aks-snet-002"
         subnet_vnet_name                = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-vnet-001"
         vnet_subnet_resource_group_name = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-network-rg-001"
@@ -242,6 +242,18 @@ locals {
       scope_name                       = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-001"
       role_definition_name             = "Azure Kubernetes Service Cluster Admin Role"
       service_principal_name           = "aks-${var.config.regulation_longname}-${var.config.environment_longname}"
+      skip_service_principal_aad_check = true
+    },
+    "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-001-rbac-cluster-admin-GitHub" = {
+      scope_name                       = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-001"
+      role_definition_name             = "Azure Kubernetes Service RBAC Cluster Admin"
+      service_principal_name           = "GitHub"
+      skip_service_principal_aad_check = true
+    },
+    "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-001-cluster-admin-role-GitHub" = {
+      scope_name                       = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-aks-001"
+      role_definition_name             = "Azure Kubernetes Service Cluster Admin Role"
+      service_principal_name           = "GitHub"
       skip_service_principal_aad_check = true
     },
   }
