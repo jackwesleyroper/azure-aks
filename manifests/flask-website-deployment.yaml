@@ -6,15 +6,15 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: flask-website
+      app: flaskwebsite
   template:
     metadata:
       labels:
-        app: flask-website
+        app: flaskwebsite
     spec:
       containers:
-      - name: flask-website
-        image: devnpaksuksacr001.azurecr.io/flask-website:latest
+      - name: flaskwebsite
+        image: devnpaksuksacr001.azurecr.io/flaskwebsite:latest
         ports:
         - containerPort: 5000
 ---
@@ -24,7 +24,7 @@ metadata:
   name: flask-website-service
 spec:
   selector:
-    app: flask-website
+    app: flaskwebsite
   ports:
     - protocol: TCP
       port: 8080
