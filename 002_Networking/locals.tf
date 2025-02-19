@@ -87,7 +87,7 @@ locals {
           access                       = "Allow"
           protocol                     = "Tcp"
           source_port_ranges           = ["*"]
-          destination_port_ranges      = ["443", "445", "5671", "5672"]
+          destination_port_ranges      = ["443", "445"]
           source_address_prefixes      = [var.config.aks1_cidr]
           destination_address_prefixes = [var.config.privateendpoints1_cidr]
           description                  = "Allow aks to privateendpoints"
@@ -165,6 +165,18 @@ locals {
           description                  = "Deny All Outbound Traffic"
         },
         # inbound rules
+        {
+          name                         = "in_tcp_${var.config.environment_longname}_external_to_${var.config.environment_longname}_aks"
+          priority                     = 101
+          direction                    = "Inbound"
+          access                       = "Allow"
+          protocol                     = "Tcp"
+          source_port_ranges           = ["*"]
+          destination_port_ranges      = ["80, 8080"]
+          source_address_prefixes      = ["82.42.167.128"]
+          destination_address_prefixes = [var.config.aks1_cidr]
+          description                  = "Allow external to aks"
+        },
         {
           name                         = "in_tcp_${var.config.environment_longname}_privateendpoints_to_${var.config.environment_longname}_aks"
           priority                     = 110
@@ -504,7 +516,7 @@ locals {
           access                       = "Allow"
           protocol                     = "Tcp"
           source_port_ranges           = ["*"]
-          destination_port_ranges      = ["443", "445", "5671", "5672"]
+          destination_port_ranges      = ["443", "445"]
           source_address_prefixes      = [var.config.aks1_cidr]
           destination_address_prefixes = [var.config.privateendpoints1_cidr]
           description                  = "Allow AKS_001 Inbound to privateendpoints"
@@ -597,7 +609,7 @@ locals {
           access                       = "Allow"
           protocol                     = "Tcp"
           source_port_ranges           = ["*"]
-          destination_port_ranges      = ["443", "445", "5671", "5672"]
+          destination_port_ranges      = ["443", "445"]
           source_address_prefixes      = [var.config.compute_cidr]
           destination_address_prefixes = [var.config.privateendpoints1_cidr]
           description                  = "Allow compute to privateendpoints"
