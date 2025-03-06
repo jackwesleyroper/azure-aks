@@ -46,7 +46,7 @@ module "tf-azurerm-key-vault-access-policy" {
 data "azurerm_key_vault_key" "key_vault_key" {
   for_each     = local.key_vault_key
   name         = each.value.name
-  key_vault_id = data.azurerm_key_vault.key_vault.id
+  key_vault_id = data.azurerm_key_vault.key_vault[each.value.name].id
 }
 
 #######################################################################
@@ -98,6 +98,12 @@ data "azurerm_private_dns_zone" "private_dns_zones" {
   for_each            = toset(local.private_dns_zone_group.names)
   name                = each.key
   resource_group_name = local.private_dns_zone_group.resource_group_name
+}
+
+data "azurerm_private_dns_zone" "private_dns_zones_automation_account" {
+  for_each            = toset(local.private_dns_zone_automation_account.names)
+  name                = each.key
+  resource_group_name = local.private_dns_zone_automation_account.resource_group_name
 }
 
 module "tf-azurerm-private-endpoint" {
@@ -436,7 +442,7 @@ module "tf-azurerm-monitor-diagnostic-setting-automation-account-private-endpoin
   for_each                       = local.diagnostic_settings_private_endpoint_automation_account
   name                           = each.value.name
   target_resource_id             = module.private_endpoint_automation_account[each.value.target_resource_name].nic_id
-  log_analytics_workspace_id     = module.log_analytics[each.value.log_analytics_name].log_analytics_workspace_id
+  log_analytics_workspace_id     = data.azurerm_log_analytics_workspace.log_analytics_workspace.id
   log_analytics_destination_type = each.value.log_analytics_destination_type
   logs_category                  = each.value.logs_category
   metrics                        = each.value.metrics
@@ -448,7 +454,7 @@ module "tf-azurerm-monitor-diagnostic-setting-automation-account" {
   for_each                       = local.diagnostic_settings_automation_account
   name                           = each.value.name
   target_resource_id             = module.automation_account[each.value.target_resource_name].automation_account_id
-  log_analytics_workspace_id     = module.log_analytics[each.value.log_analytics_name].log_analytics_workspace_id
+  log_analytics_workspace_id     = data.azurerm_log_analytics_workspace.log_analytics_workspace.id
   log_analytics_destination_type = each.value.log_analytics_destination_type
   logs_category                  = each.value.logs_category
   metrics                        = each.value.metrics
@@ -488,12 +494,12 @@ module "private_endpoint_automation_account" {
   resource_group_name             = each.value.resource_group_name
   location                        = each.value.location
   name                            = each.value.name
-  subnet_id                       = data.azurerm_subnet.snets[each.value.subnet_name].id
+  subnet_id                       = data.azurerm_subnet.subnet[each.value.name].id
   private_service_connection_name = each.value.private_service_connection_name
   private_connection_resource_id  = module.automation_account[each.value.resource_name].automation_account_id
   is_manual_connection            = each.value.is_manual_connection
   subresource_name                = each.value.subresource_name
-  private_dns_zone_group_name     = local.private_dns_zone_automation_account.group_name
+  private_dns_zone_group_name     = local.private_dns_zone_group.group_name
   private_dns_zone_id             = flatten(values(data.azurerm_private_dns_zone.private_dns_zones_automation_account)[*].id)
   private_ip_address              = each.value.private_ip_address
 

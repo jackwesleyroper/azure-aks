@@ -210,6 +210,12 @@ locals {
     resource_group_name = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-network-rg-001"
   }
 
+  private_dns_zone_automation_account = {
+    names               = ["privatelink.azure-automation.net"]
+    group_name          = "privatelink-azure-automation-net"
+    resource_group_name = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-network-rg-001"
+  }
+
   key_vault_aks = {
     name                    = "${var.config.environment_longname}-${var.config.regulation_shortname}-aks-${var.config.location_shortname}-core-kv-1"
     resource_group_name     = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-rg-001"
