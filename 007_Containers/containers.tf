@@ -422,9 +422,9 @@ module "tf-azurerm-monitor-diagnostic-setting-acr-private-endpoint" {
 # }
 
 module "tf-azurerm-monitor-diagnostic-setting-automation-account-private-endpoint" {
-  depends_on = [module.private_endpoint_automation_account]
-  source     = "git::https://github.com/jackwesleyroper/tf-azurerm-monitor-diagnostic-setting.git?ref=v1.0.0"
-  for_each = local.diagnostic_settings_private_endpoint_automation_account
+  depends_on                     = [module.private_endpoint_automation_account]
+  source                         = "git::https://github.com/jackwesleyroper/tf-azurerm-monitor-diagnostic-setting.git?ref=v1.0.0"
+  for_each                       = local.diagnostic_settings_private_endpoint_automation_account
   name                           = each.value.name
   target_resource_id             = module.private_endpoint_automation_account[each.value.target_resource_name].nic_id
   log_analytics_workspace_id     = module.log_analytics[each.value.log_analytics_name].log_analytics_workspace_id
@@ -434,9 +434,9 @@ module "tf-azurerm-monitor-diagnostic-setting-automation-account-private-endpoin
 }
 
 module "tf-azurerm-monitor-diagnostic-setting-automation-account" {
-  depends_on = [module.automation_account]
-  source     = "git::https://github.com/jackwesleyroper/tf-azurerm-monitor-diagnostic-setting.git?ref=v1.0.0"
-  for_each = local.diagnostic_settings_automation_account
+  depends_on                     = [module.automation_account]
+  source                         = "git::https://github.com/jackwesleyroper/tf-azurerm-monitor-diagnostic-setting.git?ref=v1.0.0"
+  for_each                       = local.diagnostic_settings_automation_account
   name                           = each.value.name
   target_resource_id             = module.automation_account[each.value.target_resource_name].automation_account_id
   log_analytics_workspace_id     = module.log_analytics[each.value.log_analytics_name].log_analytics_workspace_id
@@ -449,8 +449,8 @@ module "tf-azurerm-monitor-diagnostic-setting-automation-account" {
 #                           Automation Account                        #
 #######################################################################
 module "automation_account" {
-  source = "git::https://github.com/jackwesleyroper/tf-azurerm-automation-account.git?ref=v1.0.0"
-  for_each = local.automation_accounts
+  source                        = "git::https://github.com/jackwesleyroper/tf-azurerm-automation-account.git?ref=v1.0.0"
+  for_each                      = local.automation_accounts
   automation_account_name       = each.value.automation_account_name
   resource_group_name           = each.value.resource_group_name
   location                      = each.value.location
@@ -473,9 +473,9 @@ module "automation_account" {
 #              Private Endpoint Automation Account                    #
 #######################################################################
 module "private_endpoint_automation_account" {
-  source     = "git::https://github.com/jackwesleyroper/tf-azurerm-private-endpoint.git?ref=v1.0.0"
-  depends_on = [module.automation_account]
-  for_each = local.private_endpoints_automation_account
+  source                          = "git::https://github.com/jackwesleyroper/tf-azurerm-private-endpoint.git?ref=v1.0.0"
+  depends_on                      = [module.automation_account]
+  for_each                        = local.private_endpoints_automation_account
   resource_group_name             = each.value.resource_group_name
   location                        = each.value.location
   name                            = each.value.name
