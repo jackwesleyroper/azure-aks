@@ -60,6 +60,21 @@ locals {
     }
   }
 
+  private_endpoints_automation_account = {
+    "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-aa-001-pe-001" = {
+      resource_group_name             = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-rg-001"
+      name                            = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-aa-001-pe-001"
+      location                        = var.config.location_longname
+      subnet_name                     = "${var.config.regulation_longname}-privateendpoints-snet-001"
+      private_service_connection_name = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-aa-001-psc-001"
+      resource_name                   = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-aa-001"
+      is_manual_connection            = false
+      subresource_name                = "DSCAndHybridWorker"
+      member_name                     = null
+      private_ip_address              = null
+    }
+  }
+
   private_dns_zone_group = {
     group_name          = "privatelink-azurecr-io"
     names               = ["privatelink.azurecr.io"]
@@ -511,4 +526,93 @@ locals {
     }
   }
 
+  diagnostic_settings_private_endpoint_automation_account = {
+    "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-aa-001-pe-001" = {
+      name                           = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-law-001"
+      target_resource_name           = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-aa-001-pe-001"
+      log_analytics_name             = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-law-001"
+      log_analytics_destination_type = null
+      logs_category                  = {}
+      metrics = {
+        "AllMetrics" = {
+          category = "AllMetrics"
+          enabled  = true
+          retention_policy = {
+            days    = 7
+            enabled = false
+          }
+        }
+      }
+    },
+  }
+
+  diagnostic_settings_automation_account = {
+    "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-aa-001" = {
+      name                           = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-law-001"
+      target_resource_name           = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-aa-001"
+      log_analytics_name             = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-law-001"
+      log_analytics_destination_type = null
+      logs_category = {
+        "AuditEvent" = {
+          category = "AuditEvent"
+          enabled  = true
+          retention_policy = {
+            days    = 7
+            enabled = false
+          }
+        },
+        "DscNodeStatus" = {
+          category = "DscNodeStatus"
+          enabled  = true
+          retention_policy = {
+            days    = 7
+            enabled = false
+          }
+        },
+        "JobLogs" = {
+          category = "JobLogs"
+          enabled  = true
+          retention_policy = {
+            days    = 7
+            enabled = false
+          }
+        },
+        "JobStreams" = {
+          category = "JobStreams"
+          enabled  = true
+          retention_policy = {
+            days    = 7
+            enabled = false
+          }
+        },
+      }
+      metrics = {
+        "AllMetrics" = {
+          category = "AllMetrics"
+          enabled  = true
+          retention_policy = {
+            days    = 7
+            enabled = false
+          }
+        }
+      }
+    },
+  }
+
+  #######################################################################
+  #                           Automation Account                        #
+  #######################################################################
+  automation_accounts = {
+    "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-aa-001" = {
+      automation_account_name       = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-aa-001"
+      resource_group_name           = "${var.config.environment_longname}-${var.config.regulation_longname}-aks-${var.config.location_shortname}-core-rg-001"
+      location                      = var.config.location_longname
+      sku_name                      = "Basic"
+      public_network_access_enabled = false
+      identity_type                 = "SystemAssigned"
+      identity_ids                  = null
+    }
+  }
+
 }
+

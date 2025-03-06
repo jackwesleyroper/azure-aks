@@ -232,7 +232,6 @@ module "tf-azurerm-kubernetes-cluster" {
     Service            = "AKS"
     Owner              = "Jack Roper"
     "Resource_Purpose" = "AKS"
-    isto_containers    = "Azure_AKS"
   }
   identity_type                                = each.value.identity_type
   identity_ids                                 = module.tf-azurerm-user-assigned-identity[each.value.identity_name].identity_id
@@ -260,7 +259,6 @@ module "tf-azurerm-kubernetes-cluster" {
     Service            = "AKS"
     Owner              = "Jack Roper"
     "Resource_Purpose" = "AKS"
-    isto_containers    = "Azure_AKS"
   }
   kubelet_identity                              = each.value.kubelet_identity
   client_id                                     = module.tf-azurerm-user-assigned-identity[each.value.client_id].client_id
@@ -422,3 +420,79 @@ module "tf-azurerm-monitor-diagnostic-setting-acr-private-endpoint" {
 #   logs_category                  = local.diagnostic_settings_pip.logs_category
 #   metrics                        = local.diagnostic_settings_pip.metrics
 # }
+
+module "tf-azurerm-monitor-diagnostic-setting-automation-account-private-endpoint" {
+  depends_on = [module.private_endpoint_automation_account]
+  source     = "git::https://github.com/jackwesleyroper/tf-azurerm-monitor-diagnostic-setting.git?ref=v1.0.0"
+  for_each = local.diagnostic_settings_private_endpoint_automation_account
+  name                           = each.value.name
+  target_resource_id             = module.private_endpoint_automation_account[each.value.target_resource_name].nic_id
+  log_analytics_workspace_id     = module.log_analytics[each.value.log_analytics_name].log_analytics_workspace_id
+  log_analytics_destination_type = each.value.log_analytics_destination_type
+  logs_category                  = each.value.logs_category
+  metrics                        = each.value.metrics
+}
+
+module "tf-azurerm-monitor-diagnostic-setting-automation-account" {
+  depends_on = [module.automation_account]
+  source     = "git::https://github.com/jackwesleyroper/tf-azurerm-monitor-diagnostic-setting.git?ref=v1.0.0"
+  for_each = local.diagnostic_settings_automation_account
+  name                           = each.value.name
+  target_resource_id             = module.automation_account[each.value.target_resource_name].automation_account_id
+  log_analytics_workspace_id     = module.log_analytics[each.value.log_analytics_name].log_analytics_workspace_id
+  log_analytics_destination_type = each.value.log_analytics_destination_type
+  logs_category                  = each.value.logs_category
+  metrics                        = each.value.metrics
+}
+
+#######################################################################
+#                           Automation Account                        #
+#######################################################################
+module "automation_account" {
+  source = "git::https://github.com/jackwesleyroper/tf-azurerm-automation-account.git?ref=v1.0.0"
+  for_each = local.automation_accounts
+  automation_account_name       = each.value.automation_account_name
+  resource_group_name           = each.value.resource_group_name
+  location                      = each.value.location
+  sku_name                      = each.value.sku_name
+  public_network_access_enabled = each.value.public_network_access_enabled
+  identity_type                 = each.value.identity_type
+  identity_ids                  = each.value.identity_ids
+  encryption_key_vault_key_id   = data.azurerm_key_vault.key_vault.id
+
+  tags = {
+    Name               = each.value.name
+    "Environment_Type" = var.config.environment_longname
+    Service            = "AKS"
+    Owner              = "Jack Roper"
+    "Resource_Purpose" = "Automation Account"
+  }
+}
+
+#######################################################################
+#              Private Endpoint Automation Account                    #
+#######################################################################
+module "private_endpoint_automation_account" {
+  source     = "git::https://github.com/jackwesleyroper/tf-azurerm-private-endpoint.git?ref=v1.0.0"
+  depends_on = [module.automation_account]
+  for_each = local.private_endpoints_automation_account
+  resource_group_name             = each.value.resource_group_name
+  location                        = each.value.location
+  name                            = each.value.name
+  subnet_id                       = data.azurerm_subnet.snets[each.value.subnet_name].id
+  private_service_connection_name = each.value.private_service_connection_name
+  private_connection_resource_id  = module.automation_account[each.value.resource_name].automation_account_id
+  is_manual_connection            = each.value.is_manual_connection
+  subresource_name                = each.value.subresource_name
+  private_dns_zone_group_name     = local.private_dns_zone_automation_account.group_name
+  private_dns_zone_id             = flatten(values(data.azurerm_private_dns_zone.private_dns_zones_automation_account)[*].id)
+  private_ip_address              = each.value.private_ip_address
+
+  tags = {
+    Name               = each.value.name
+    "Environment_Type" = var.config.environment_longname
+    Service            = "AKS"
+    Owner              = "Jack Roper"
+    "Resource_Purpose" = "Private Endpoint"
+  }
+}
