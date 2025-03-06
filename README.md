@@ -29,6 +29,7 @@ The project contains the folowing resources:
 * Network Flow Logs
 * Azure Kubernetes Service
 * Azure Container Registry
+* Automation Account / Runbook / Schedule
 
 ## List of referenced modules
 All modules used can be found under my jackwesleyroper GitHub account.
@@ -60,22 +61,23 @@ All modules used can be found under my jackwesleyroper GitHub account.
 
 ## Testing
 
-To connect to your Nginx instance deployed on Azure Kubernetes Service (AKS) and check if it's working, you can follow these steps:
+To connect to your instance deployed on Azure Kubernetes Service (AKS) and check if it's working, you can follow these steps:
 
-Get the External IP Address: After deploying the Nginx instance, you need to get the external IP address of the service. You can do this by running the following command:
-
-`kubectl get services nginx-service`
+`kubectl get services`
 Look for the EXTERNAL-IP column in the output. It might take a few minutes for the external IP to be assigned.
 
-Access the Nginx Instance: Once you have the external IP address, you can open a web browser and navigate to `http://<EXTERNAL-IP>`. You should see the default Nginx welcome page if everything is working correctly.
+Access the Instance: Once you have the external IP address, you can open a web browser and navigate to `http://<EXTERNAL-IP>`. You should see the default welcome page if everything is working correctly.
 
 Verify the Deployment: You can also verify the deployment by checking the pods' status. Run the following command to see the status of the pods:
 
 `kubectl get pods`
-Ensure that the Nginx pod is in the Running state.
+Ensure that the pods are in the Running state.
 
 ## Build notes / to do
 
 * Restict KV access to Github actions listed here: https://api.github.com/meta (currently set to allow public access and default action is allow)
 * Add rationale for each stage for resources used and settings
 * Is Premium KV needed?
+* Update to support v3 or azuread (currently pinned to 2.51.1)
+* Bootstrapping
+* Enable private cluster with PEs and lock down access via Bastion / VM on the network

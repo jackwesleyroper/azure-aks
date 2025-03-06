@@ -44,7 +44,8 @@ module "tf-azurerm-key-vault-access-policy" {
 #                              Key Vault Key                          #
 #######################################################################
 data "azurerm_key_vault_key" "key_vault_key" {
-  name         = local.key_vault_key.name
+  for_each     = local.key_vault_key
+  name         = each.value.name
   key_vault_id = data.azurerm_key_vault.key_vault.id
 }
 
@@ -466,7 +467,7 @@ module "automation_account" {
   public_network_access_enabled = each.value.public_network_access_enabled
   identity_type                 = each.value.identity_type
   identity_ids                  = each.value.identity_ids
-  encryption_key_vault_key_id   = data.azurerm_key_vault.key_vault.id
+  encryption_key_vault_key_id   = data.azurerm_key_vault.key_vault[each.value.name].id
 
   tags = {
     Name               = each.value.name
