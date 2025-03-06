@@ -218,6 +218,13 @@ locals {
   }
 
   #######################################################################
+  #                              Key Vault Key                          #
+  #######################################################################
+  key_vault_key = {
+    name = "${var.config.environment_shortname}${var.config.regulation_shortname}aks${var.config.location_shortname}logsstr001-stg-cmk-001"
+  }
+
+  #######################################################################
   #             Azure container Registry Role Assignment                #
   #######################################################################
   role_assignment_acr = {

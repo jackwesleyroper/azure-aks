@@ -41,6 +41,14 @@ module "tf-azurerm-key-vault-access-policy" {
 }
 
 #######################################################################
+#                              Key Vault Key                          #
+#######################################################################
+data "azurerm_key_vault_key" "key_vault_key" {
+  name         = local.key_vault_key.name
+  key_vault_id = data.azurerm_key_vault.key_vault.id
+}
+
+#######################################################################
 #                           Container registry                        #
 #######################################################################
 module "tf-azurerm-container-registry" {
