@@ -227,7 +227,7 @@ locals {
   #                              Key Vault Key                          #
   #######################################################################
   key_vault_key = {
-    name = "${var.config.environment_shortname}${var.config.regulation_shortname}aks${var.config.location_shortname}logsstr001-stg-cmk-001"
+    name = "${var.config.environment_longname}${var.config.regulation_shortname}aks${var.config.location_shortname}logsstr001-stg-cmk-001"
   }
 
   #######################################################################
@@ -624,6 +624,7 @@ locals {
       public_network_access_enabled = false
       identity_type                 = "SystemAssigned"
       identity_ids                  = null
+      key_vault_key_name            = "${var.config.environment_longname}${var.config.regulation_shortname}aks${var.config.location_shortname}logsstr001-stg-cmk-001"
     }
   }
 

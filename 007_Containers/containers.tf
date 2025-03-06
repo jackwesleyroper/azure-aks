@@ -473,7 +473,7 @@ module "automation_account" {
   public_network_access_enabled = each.value.public_network_access_enabled
   identity_type                 = each.value.identity_type
   identity_ids                  = each.value.identity_ids
-  encryption_key_vault_key_id   = data.azurerm_key_vault.key_vault[each.value.name].id
+  encryption_key_vault_key_id   = data.azurerm_key_vault.key_vault[each.value.key_vault_key_name].id
 
   tags = {
     Name               = each.value.name
